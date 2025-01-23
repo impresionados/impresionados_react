@@ -1,48 +1,58 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, User, Home } from 'lucide-react';
+import { ShoppingCart, User, Home, Search, Filter } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
+import '../styles/Navbar.css';
+import { useState } from 'react';
 
 export const Navbar = () => {
   const cartItems = useCartStore((state) => state.items);
+  const [isSearchVisible, setSearchVisible] = useState(false); // Controlamos si se muestra la barra de búsqueda
 
   return (
-    <nav className="bg-white shadow-md fixed w-full top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0">
-              <img
-                className="h-12 w-auto"
-                src="https://i.postimg.cc/d17rw6vp/sinfondoo-sinletra.png"
-                alt="3D Printing Store"
+    <nav className="navbar">
+      <div className="navbar-container">
+        <div className="navbar-content">
+          {/* Contenedor del logo con animación */}
+          <Link to="/" className="navbar-logo-container">
+            <img
+              className="logo-image"
+              src="https://i.postimg.cc/d17rw6vp/sinfondoo-sinletra.png"
+              alt="3D Printing Store"
+            />
+            <span className="logo-text">Impresionados 3D</span>
+          </Link>
+
+          <div className="navbar-links">
+            {/* Botón de búsqueda */}
+            <div
+              className="navbar-link"
+              onClick={() => setSearchVisible((prev) => !prev)} // Alterna la visibilidad
+            >
+              <Search className="icon" />
+            </div>
+
+            {/* Barra de búsqueda dinámica */}
+            <div className={`search-wrapper ${isSearchVisible ? 'visible' : ''}`}>
+              <Filter className="icon"/>
+
+              <input
+                type="text"
+                className="search-bar"
+                placeholder="Buscar productos..."
               />
+            </div>
+
+            <Link to="/" className="navbar-link">
+              <Home className="icon" />
             </Link>
-          </div>
-          
-          <div className="flex items-center space-x-4">
-            <Link
-              to="/"
-              className="text-gray-600 hover:text-blue-600 p-2 rounded-lg transition-colors"
-            >
-              <Home className="h-6 w-6" />
-            </Link>
-            <Link
-              to="/cart"
-              className="text-gray-600 hover:text-blue-600 p-2 rounded-lg transition-colors relative"
-            >
-              <ShoppingCart className="h-6 w-6" />
+            <Link to="/cart" className="navbar-link cart-link">
+              <ShoppingCart className="icon" />
               {cartItems.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartItems.length}
-                </span>
+                <span className="cart-count">{cartItems.length}</span>
               )}
             </Link>
-            <Link
-              to="/profile"
-              className="text-gray-600 hover:text-blue-600 p-2 rounded-lg transition-colors"
-            >
-              <User className="h-6 w-6" />
+            <Link to="/profile" className="navbar-link">
+              <User className="icon" />
             </Link>
           </div>
         </div>

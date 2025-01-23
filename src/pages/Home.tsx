@@ -54,18 +54,7 @@ export const Home = () => {
     <div className="py-8">
       <div className="mb-8">
         <div className="flex flex-col md:flex-row gap-4 items-center">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search products..."
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
           <div className="flex items-center gap-2">
-            <Filter className="text-gray-600" />
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
                 <button
