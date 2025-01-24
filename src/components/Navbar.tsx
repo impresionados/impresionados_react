@@ -29,6 +29,7 @@ export const Navbar = () => {
               onClick={() => setSearchVisible((prev) => !prev)} // Alterna la visibilidad
             >
               <Search className="icon" />
+              <div className='icon-text'>Buscar</div>
             </div>
 
             {/* Barra de búsqueda dinámica */}
@@ -41,18 +42,16 @@ export const Navbar = () => {
                 placeholder="Buscar productos..."
               />
             </div>
-
-            <Link to="/" className="navbar-link">
-              <Home className="icon" />
-            </Link>
             <Link to="/cart" className="navbar-link cart-link">
               <ShoppingCart className="icon" />
               {cartItems.length > 0 && (
                 <span className="cart-count">{cartItems.length}</span>
               )}
+              <div className='icon-text'>Cesta</div>
             </Link>
             <Link to="/profile" className="navbar-link">
               <User className="icon" />
+              <div className='icon-text'>Perfil</div>
             </Link>
           </div>
         </div>
