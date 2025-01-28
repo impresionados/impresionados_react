@@ -1,91 +1,150 @@
-import React, { useState, useEffect } from 'react';
-import { ProductCard } from '../../components/ProductCard/ProductCard';
-import { Product, Category } from '../../types';
+import React, { useState } from 'react';
+import { CategoryFilters } from '../../components/CategoryFilters/CategoryFilters';
+import { ProductsList } from '../../components/ProductList/ProductList';
 import './Home.css';
-import { Search, Filter } from 'lucide-react';
 
 export const Home: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [categories, setCategories] = useState<{ _id: string; name: string }[]>([
+    { _id: '1', name: 'Electrónica' },
+    { _id: '2', name: 'Ropa' },
+    { _id: '3', name: 'Deporte' },
+  ]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Fetch products and categories from API
-    const fetchData = async () => {
-      try {
-        const [productsRes, categoriesRes] = await Promise.all([
-          fetch('http://localhost:5000/api/products'),
-          fetch('http://localhost:5000/api/categories'),
-        ]);
-
-        const productsData = await productsRes.json();
-        const categoriesData = await categoriesRes.json();
-
-        setProducts(productsData);
-        setCategories(categoriesData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const [products, setProducts] = useState([
+    {
+      _id: '101',
+      name: 'Camiseta',
+      description: 'Ropa deportiva cómoda y de alta calidad',
+      price: 19.99,
+      stock: 50,
+      category: ['Ropa', 'Deporte'],
+      image: 'img101',
+      super_tipo: 'Vestimenta',
+      ratings: [
+        { user: 'User1', score: 4, comment: 'Muy buena calidad' },
+        { user: 'User2', score: 5, comment: 'Perfecta para entrenar' },
+      ],
+    },
+    {
+      _id: '102',
+      name: 'Auriculares',
+      description: 'Auriculares inalámbricos con cancelación de ruido',
+      price: 99.99,
+      stock: 30,
+      category: ['Electrónica'],
+      image: 'img102',
+      super_tipo: 'Accesorios',
+      ratings: [
+        { user: 'User3', score: 5, comment: 'El sonido es espectacular' },
+        { user: 'User4', score: 4, comment: 'Buena relación calidad-precio' },
+      ],
+    },
+    {
+      _id: '103',
+      name: 'Balón',
+      description: 'Balón de fútbol profesional',
+      price: 29.99,
+      stock: 20,
+      category: ['Deporte'],
+      image: 'img103',
+      super_tipo: 'Equipo deportivo',
+      ratings: [
+        { user: 'User5', score: 4, comment: 'Buen rebote y durabilidad' },
+        { user: 'User6', score: 5, comment: 'Excelente para partidos' },
+      ],
+      
+    },
+    {
+      _id: '103',
+      name: 'Balón',
+      description: 'Balón de fútbol profesional',
+      price: 29.99,
+      stock: 20,
+      category: ['Deporte'],
+      image: 'img103',
+      super_tipo: 'Equipo deportivo',
+      ratings: [
+        { user: 'User5', score: 4, comment: 'Buen rebote y durabilidad' },
+        { user: 'User6', score: 5, comment: 'Excelente para partidos' },
+      ],
+      
+    },
+    {
+      _id: '103',
+      name: 'Balón',
+      description: 'Balón de fútbol profesional',
+      price: 29.99,
+      stock: 20,
+      category: ['Deporte'],
+      image: 'img103',
+      super_tipo: 'Equipo deportivo',
+      ratings: [
+        { user: 'User5', score: 4, comment: 'Buen rebote y durabilidad' },
+        { user: 'User6', score: 5, comment: 'Excelente para partidos' },
+      ],
+      
+    },
+    {
+      _id: '103',
+      name: 'Balón',
+      description: 'Balón de fútbol profesional',
+      price: 29.99,
+      stock: 20,
+      category: ['Deporte'],
+      image: 'img103',
+      super_tipo: 'Equipo deportivo',
+      ratings: [
+        { user: 'User5', score: 4, comment: 'Buen rebote y durabilidad' },
+        { user: 'User6', score: 5, comment: 'Excelente para partidos' },
+      ],
+      
+    },
+    {
+      _id: '103',
+      name: 'Balón',
+      description: 'Balón de fútbol profesional',
+      price: 29.99,
+      stock: 20,
+      category: ['Deporte'],
+      image: 'img103',
+      super_tipo: 'Equipo deportivo',
+      ratings: [
+        { user: 'User5', score: 4, comment: 'Buen rebote y durabilidad' },
+        { user: 'User6', score: 5, comment: 'Excelente para partidos' },
+      ],
+      
+    },
+  ]);
+  
 
   const filteredProducts = products.filter((product) => {
-    const matchesSearch =
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory =
       selectedCategories.length === 0 ||
       product.category.some((cat) => selectedCategories.includes(cat));
-    return matchesSearch && matchesCategory;
+    return matchesCategory;
   });
 
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-      </div>
+  const handleCategorySelect = (categoryName: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(categoryName)
+        ? prev.filter((c) => c !== categoryName)
+        : [...prev, categoryName]
     );
-  }
+  };
 
   return (
     <div className="home-container">
-      {/* Categorías y búsqueda */}
+      {/* Filtros de categorías */}
       <div className="filters-container">
-        <div className="categories-container">
-          {categories.map((category) => (
-            <button
-              key={category._id}
-              onClick={() => {
-                setSelectedCategories((prev) =>
-                  prev.includes(category.name)
-                    ? prev.filter((c) => c !== category.name)
-                    : [...prev, category.name]
-                );
-              }}
-              className={`category-button ${
-                selectedCategories.includes(category.name)
-                  ? 'category-button-active'
-                  : ''
-              }`}
-            >
-              {category.name}
-            </button>
-          ))}
-        </div>
+        <CategoryFilters
+          categories={categories}
+          selectedCategories={selectedCategories}
+          onCategorySelect={handleCategorySelect}
+        />
       </div>
 
-      {/* Productos filtrados */}
-      <div className="products-container">
-        {filteredProducts.map((product) => (
-          <ProductCard key={product._id} product={product} />
-        ))}
-      </div>
+      {/* Lista de productos */}
+      <ProductsList products={filteredProducts} />
     </div>
   );
 };

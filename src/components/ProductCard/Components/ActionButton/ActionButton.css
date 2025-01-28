@@ -1,0 +1,21 @@
+.action-button {
+    border: none;
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .action-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .action-button:hover:not(:disabled) {
+    background-color: #0056b3;
+  }
+  

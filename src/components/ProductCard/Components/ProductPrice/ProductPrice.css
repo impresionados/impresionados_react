@@ -1,0 +1,5 @@
+.product-price {
+  font-size: 1.25rem; /* Tamaño del precio */
+  font-weight: bold; /* Peso del texto */
+  color: #3182ce; /* Azul-600 */
+}

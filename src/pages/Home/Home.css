@@ -39,10 +39,12 @@
   
   /* Contenedor de productos */
   .products-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adaptable */
-    gap: 1.5rem;
+    display: grid; /* Usamos CSS Grid */
+    grid-template-columns: repeat(3, 1fr); /* Siempre 3 columnas de igual ancho */
+    gap: 1.5rem; /* Separación entre elementos */
+    margin-top: 1rem; /* Separación superior */
   }
+  
   
   /* Loading */
   .loading-container {
