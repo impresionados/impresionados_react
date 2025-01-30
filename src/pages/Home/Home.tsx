@@ -2,15 +2,22 @@ import React, { useState } from 'react';
 import { CategoryFilters } from '../../components/CategoryFilters/CategoryFilters';
 import { ProductsList } from '../../components/ProductList/ProductList';
 import './Home.css';
+import { SuperCategoryFilters } from '../../components/SuperCategoryFilters/SuperCategoryFilters';
 
 export const Home: React.FC = () => {
-  const [categories, setCategories] = useState<{ _id: string; name: string }[]>([
+  const [categories] = useState<{ _id: string; name: string }[]>([
     { _id: '1', name: 'Electrónica' },
     { _id: '2', name: 'Ropa' },
     { _id: '3', name: 'Deporte' },
   ]);
+  const [superCategories] = useState<{ _id: string; name: string }[]>([
+    { _id: '1', name: 'Vestimenta' },
+    { _id: '2', name: 'Pijama' },
+    { _id: '3', name: 'Totorota' },
+  ]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [products, setProducts] = useState([
+  const [selectedSuperCategories, setSelectedSuperCategories] = useState<string[]>([]);
+  const [products] = useState([
     {
       _id: '101',
       name: 'Camiseta',
@@ -55,7 +62,7 @@ export const Home: React.FC = () => {
       
     },
     {
-      _id: '103',
+      _id: '104',
       name: 'Balón',
       description: 'Balón de fútbol profesional',
       price: 29.99,
@@ -70,7 +77,7 @@ export const Home: React.FC = () => {
       
     },
     {
-      _id: '103',
+      _id: '105',
       name: 'Balón',
       description: 'Balón de fútbol profesional',
       price: 29.99,
@@ -85,7 +92,7 @@ export const Home: React.FC = () => {
       
     },
     {
-      _id: '103',
+      _id: '106',
       name: 'Balón',
       description: 'Balón de fútbol profesional',
       price: 29.99,
@@ -100,7 +107,7 @@ export const Home: React.FC = () => {
       
     },
     {
-      _id: '103',
+      _id: '107',
       name: 'Balón',
       description: 'Balón de fútbol profesional',
       price: 29.99,
@@ -121,8 +128,14 @@ export const Home: React.FC = () => {
     const matchesCategory =
       selectedCategories.length === 0 ||
       product.category.some((cat) => selectedCategories.includes(cat));
-    return matchesCategory;
+  
+    const matchesSuperCategory =
+      selectedSuperCategories.length === 0 ||
+      selectedSuperCategories.includes(product.super_tipo);
+  
+    return matchesCategory && matchesSuperCategory; // 🔥 Ambos filtros deben cumplirse
   });
+  
 
   const handleCategorySelect = (categoryName: string) => {
     setSelectedCategories((prev) =>
@@ -131,6 +144,15 @@ export const Home: React.FC = () => {
         : [...prev, categoryName]
     );
   };
+
+  const handleSuperCategorySelect = (superCategoryName: string) => {
+    setSelectedSuperCategories((prev) =>
+      prev.includes(superCategoryName)
+        ? prev.filter((c) => c !== superCategoryName)
+        : [...prev, superCategoryName]
+    );
+  };
+  
 
   return (
     <div className="home-container">
@@ -141,8 +163,15 @@ export const Home: React.FC = () => {
           selectedCategories={selectedCategories}
           onCategorySelect={handleCategorySelect}
         />
-      </div>
+        <SuperCategoryFilters 
+          superCategories={superCategories}
+          selectedSuperCategories={selectedSuperCategories}
+          onSuperCategorySelect={handleSuperCategorySelect}
+        />
 
+        
+      </div>
+      
       {/* Lista de productos */}
       <ProductsList products={filteredProducts} />
     </div>

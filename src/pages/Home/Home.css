@@ -7,8 +7,9 @@
   .filters-container {
     margin-bottom: 2rem;
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    gap: 50%;
   }
   
   /* Categorías */
@@ -40,7 +41,7 @@
   /* Contenedor de productos */
   .products-container {
     display: grid; /* Usamos CSS Grid */
-    grid-template-columns: repeat(3, 1fr); /* Siempre 3 columnas de igual ancho */
+    grid-template-columns: repeat(3 , 1fr); /* Siempre 3 columnas de igual ancho */
     gap: 1.5rem; /* Separación entre elementos */
     margin-top: 1rem; /* Separación superior */
   }
@@ -62,7 +63,7 @@
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
-  
+
   @keyframes spin {
     from {
       transform: rotate(0deg);

@@ -1,3 +1,5 @@
+import './CategoryFilters.css';
+
 interface CategoryFiltersProps {
     categories: { _id: string; name: string }[];
     selectedCategories: string[];
@@ -11,6 +13,7 @@ interface CategoryFiltersProps {
   }) => {
     return (
       <div className="categories-container">
+        <div className="title">Categorías</div>
         {categories.map((category) => (
           <button
             key={category._id}

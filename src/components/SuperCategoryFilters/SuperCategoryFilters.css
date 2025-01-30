@@ -1,5 +1,5 @@
-/* Contenedor principal de las categorías */
-.categories-container {
+/* Contenedor principal de las super categorías */
+.super-categories-container {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -13,7 +13,7 @@
   }
   
   /* Estilo base de los botones */
-  .category-button {
+  .super-category-button {
     background-color: #e2e8f0; /* Gris claro */
     border: none;
     padding: 0.5rem 1rem;
@@ -27,35 +27,36 @@
   }
   
   /* Cuando el botón está seleccionado */
-  .category-button-active {
+  .super-category-button-active {
     background-color: #3182ce; /* Azul vibrante */
     color: white;
     font-weight: bold;
   }
   
   /* Efecto hover */
-  .category-button:hover {
+  .super-category-button:hover {
     background-color: #cbd5e0; /* Azul más claro */
   }
   
   /* Efecto hover en botón activo */
-  .category-button-active:hover {
+  .super-category-button-active:hover {
     background-color: #2b6cb0; /* Azul más oscuro */
   }
-  .title {
-    font-size: 1.5rem; /* Tamaño del texto */
-    font-weight: bold; /* Texto en negrita */
-    color: #2b6cb0; /* Azul vibrante */
-    text-align: left; /* Alineación a la izquierda */
-    padding-bottom: 0.5rem; /* Espaciado inferior */
-    border-bottom: 2px solid #2b6cb0; /* Línea decorativa */
-    margin-bottom: 1rem; /* Espaciado inferior */
-    letter-spacing: 0.5px; /* Espaciado entre letras */
-    transition: all 0.3s ease-in-out; /* Animación suave */
-  }
-  
-  /* Efecto hover para el título */
-  .title:hover {
-    color: #1e4a7b; /* Azul más oscuro al pasar el mouse */
-    border-bottom: 2px solid #1e4a7b; /* Línea más oscura */
-  }
+  /* Estilo para el título del contenedor de super categorías */
+.title {
+  font-size: 1.5rem; /* Tamaño del texto */
+  font-weight: bold; /* Texto en negrita */
+  color: #2b6cb0; /* Azul vibrante */
+  text-align: left; /* Alineación a la izquierda */
+  padding-bottom: 0.5rem; /* Espaciado inferior */
+  border-bottom: 2px solid #2b6cb0; /* Línea decorativa */
+  margin-bottom: 1rem; /* Espaciado inferior */
+  letter-spacing: 0.5px; /* Espaciado entre letras */
+  transition: all 0.3s ease-in-out; /* Animación suave */
+}
+
+/* Efecto hover para el título */
+.title:hover {
+  color: #1e4a7b; /* Azul más oscuro al pasar el mouse */
+  border-bottom: 2px solid #1e4a7b; /* Línea más oscura */
+}

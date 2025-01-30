@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar/Navbar';
 import { Home } from './pages/Home/Home';
+import { ProductDetail } from "./pages/Products/Products";
 // import { Cart } from './pages/Cart';
 import { Profile } from './pages/Profile/Profile';
 // import { ProductDetails } from './pages/ProductDetails';
@@ -14,6 +15,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path='/profile' element={<Profile />}/>
+            <Route path='/product/:productId' element={<ProductDetail />}/>
           </Routes>
         </div>
       </div>

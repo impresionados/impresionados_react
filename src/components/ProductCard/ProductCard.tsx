@@ -10,6 +10,7 @@ import { useCartStore } from '../../store/cartStore';
 import { Link } from 'react-router-dom';
 import './ProductCard.css';
 
+
 interface Product {
   _id: string;
   name: string;
@@ -18,6 +19,8 @@ interface Product {
   stock: number;
   category: string[];
   image: string;
+  super_tipo: string;
+  ratings:string;
 }
 
 interface ProductCardProps {
@@ -30,23 +33,31 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, context = 'st
   const addItem = useCartStore((state) => state.addItem);
 
   return (
-    <div className="product-card">
-      <ProductImage src={product.image} alt={product.name} />
-      <div className="product-details">
-        <h3 className="product-name">{product.name}</h3>
-        <ProductDescription description={product.description} />
-        <ProductCategories categories={product.category} />
-        <ProductPrice price={product.price} />
-        <ProductActions context="store"
-          onAction={() => addItem(product)} // Función para añadir al carrito
-          productId={product._id}
-          stock={product.stock}/>
-        <div className="product-stock">
-          <span className={product.stock > 0 ? 'in-stock' : 'out-of-stock'}>
-            {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
-          </span>
+      <div className="product-card">
+        <Link to={`/product/${product._id}`} className="product-action">
+          <ProductImage src={product.image} alt={product.name} />
+        </Link>
+
+        <div className="product-details">
+          <Link to={`/product/${product._id}`} className="product-action">
+            <h3 className="product-name">{product.name}</h3>
+            <ProductDescription description={product.description} />
+            <ProductCategories categories={product.category} />
+            <ProductPrice price={product.price} />
+          </Link>
+
+          <ProductActions context="store"
+            onAction={() => addItem(product)} // Función para añadir al carrito
+            productId={product._id}
+            stock={product.stock}/>
+          <Link to={`/product/${product._id}`} className="product-action">
+            <div className="product-stock">
+              <span className={product.stock > 0 ? 'in-stock' : 'out-of-stock'}>
+                {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+              </span>
+            </div>
+          </Link>
         </div>
       </div>
-    </div>
   );
 };

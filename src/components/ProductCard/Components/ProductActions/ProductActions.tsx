@@ -22,9 +22,6 @@ export const ProductActions: React.FC<ProductActionsProps> = ({
       {context === 'store' && (
         <>
           {/* Botón de ver detalles */}
-          <Link to={`/product/${productId}`} className="product-action">
-            <Eye className="icon" />
-          </Link>
 
           {/* Botón de añadir a la cesta */}
           <ActionButton
