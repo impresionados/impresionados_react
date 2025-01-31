@@ -1,141 +1,107 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { CategoryFilters } from '../../components/CategoryFilters/CategoryFilters';
 import { ProductsList } from '../../components/ProductList/ProductList';
 import './Home.css';
 import { SuperCategoryFilters } from '../../components/SuperCategoryFilters/SuperCategoryFilters';
 
+const categories = [
+  { id: '1', name: 'Electrónica' },
+  { id: '2', name: 'Ropa' },
+  { id: '3', name: 'Deporte' },
+];
+
+const superCategories = [
+  { id: '1', name: 'Vestimenta' },
+  { id: '2', name: 'Pijama' },
+  { id: '3', name: 'Totorota' },
+];
+
+const defaultImage = "/images/default-image.png";
+
+
+
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  category: string[];
+  super_tipo: string;
+  ratings: Array<{
+    user: string;
+    score: number;
+    comment: string;
+  }>;
+}
+
 export const Home: React.FC = () => {
-  const [categories] = useState<{ id: string; name: string }[]>([
-    { id: '1', name: 'Electrónica' },
-    { id: '2', name: 'Ropa' },
-    { id: '3', name: 'Deporte' },
-  ]);
-  const [superCategories] = useState<{ id: string; name: string }[]>([
-    { id: '1', name: 'Vestimenta' },
-    { id: '2', name: 'Pijama' },
-    { id: '3', name: 'Totorota' },
-  ]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [productImages, setProductImages] = useState<{ [key: string]: string }>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSuperCategories, setSelectedSuperCategories] = useState<string[]>([]);
-  const [products] = useState([
-    {
-      id: '101',
-      name: 'Camiseta',
-      description: 'Ropa deportiva cómoda y de alta calidad',
-      price: 19.99,
-      stock: 50,
-      category: ['Ropa', 'Deporte'],
-      image: 'img101',
-      super_tipo: 'Vestimenta',
-      ratings: [
-        { user: 'User1', score: 4, comment: 'Muy buena calidad' },
-        { user: 'User2', score: 5, comment: 'Perfecta para entrenar' },
-      ],
-    },
-    {
-      id: '102',
-      name: 'Auriculares',
-      description: 'Auriculares inalámbricos con cancelación de ruido',
-      price: 99.99,
-      stock: 30,
-      category: ['Electrónica'],
-      image: 'img102',
-      super_tipo: 'Accesorios',
-      ratings: [
-        { user: 'User3', score: 5, comment: 'El sonido es espectacular' },
-        { user: 'User4', score: 4, comment: 'Buena relación calidad-precio' },
-      ],
-    },
-    {
-      id: '103',
-      name: 'Balón',
-      description: 'Balón de fútbol profesional',
-      price: 29.99,
-      stock: 20,
-      category: ['Deporte'],
-      image: 'img103',
-      super_tipo: 'Equipo deportivo',
-      ratings: [
-        { user: 'User5', score: 4, comment: 'Buen rebote y durabilidad' },
-        { user: 'User6', score: 5, comment: 'Excelente para partidos' },
-      ],
-      
-    },
-    {
-      id: '104',
-      name: 'Balón',
-      description: 'Balón de fútbol profesional',
-      price: 29.99,
-      stock: 20,
-      category: ['Deporte'],
-      image: 'img103',
-      super_tipo: 'Equipo deportivo',
-      ratings: [
-        { user: 'User5', score: 4, comment: 'Buen rebote y durabilidad' },
-        { user: 'User6', score: 5, comment: 'Excelente para partidos' },
-      ],
-      
-    },
-    {
-      id: '105',
-      name: 'Balón',
-      description: 'Balón de fútbol profesional',
-      price: 29.99,
-      stock: 20,
-      category: ['Deporte'],
-      image: 'img103',
-      super_tipo: 'Equipo deportivo',
-      ratings: [
-        { user: 'User5', score: 4, comment: 'Buen rebote y durabilidad' },
-        { user: 'User6', score: 5, comment: 'Excelente para partidos' },
-      ],
-      
-    },
-    {
-      id: '106',
-      name: 'Balón',
-      description: 'Balón de fútbol profesional',
-      price: 29.99,
-      stock: 20,
-      category: ['Deporte'],
-      image: 'img103',
-      super_tipo: 'Equipo deportivo',
-      ratings: [
-        { user: 'User5', score: 4, comment: 'Buen rebote y durabilidad' },
-        { user: 'User6', score: 5, comment: 'Excelente para partidos' },
-      ],
-      
-    },
-    {
-      id: '107',
-      name: 'Balón',
-      description: 'Balón de fútbol profesional',
-      price: 29.99,
-      stock: 20,
-      category: ['Deporte'],
-      image: 'img103',
-      super_tipo: 'Equipo deportivo',
-      ratings: [
-        { user: 'User5', score: 4, comment: 'Buen rebote y durabilidad' },
-        { user: 'User6', score: 5, comment: 'Excelente para partidos' },
-      ],
-      
-    },
-  ]);
-  
 
-  const filteredProducts = products.filter((product) => {
-    const matchesCategory =
-      selectedCategories.length === 0 ||
-      product.category.some((cat) => selectedCategories.includes(cat));
-  
-    const matchesSuperCategory =
-      selectedSuperCategories.length === 0 ||
-      selectedSuperCategories.includes(product.super_tipo);
-  
-    return matchesCategory && matchesSuperCategory; // 🔥 Ambos filtros deben cumplirse
-  });
-  
+  // 🔹 Obtener productos sin imágenes
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:8001/products/');
+        const data = await response.json();
+        setProducts(data);
+      } catch (err) {
+        console.error("❌ Error al obtener productos:", err);
+        setError(err instanceof Error ? err.message : "Error desconocido");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // 🔹 Obtener imágenes por separado para cada producto
+  useEffect(() => {
+    const fetchImages = async () => {
+      const images: { [key: string]: string } = {};
+      await Promise.all(
+        products.map(async (product) => {
+          try {
+            const response = await fetch(`http://localhost:8001/products/${product.id}/image`);
+            const blob = await response.blob();
+            images[product.id] = URL.createObjectURL(blob);
+          } catch (err) {
+            console.error(`⚠️ Error al obtener imagen del producto ${product.id}:`, err);
+          }
+        })
+      );
+      setProductImages(images);
+    };
+
+    if (products.length > 0) {
+      fetchImages();
+    }
+  }, [products]);
+
+  // 🔹 Filtrado de productos
+  const filteredProducts = useMemo(() => {
+    return products.map((product) => ({
+      ...product,
+      image: productImages[product.id] || "", // Asigna la imagen descargada
+    })).filter((product) => {
+      const matchesCategory =
+        selectedCategories.length === 0 ||
+        product.category.some((cat) => selectedCategories.includes(cat));
+
+      const matchesSuperCategory =
+        selectedSuperCategories.length === 0 ||
+        selectedSuperCategories.includes(product.super_tipo);
+
+      return matchesCategory && matchesSuperCategory;
+    });
+  }, [products, productImages, selectedCategories, selectedSuperCategories]);
 
   const handleCategorySelect = (categoryName: string) => {
     setSelectedCategories((prev) =>
@@ -152,26 +118,36 @@ export const Home: React.FC = () => {
         : [...prev, superCategoryName]
     );
   };
-  
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Cargando productos...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <p className="error-message">❌ Error: {error}</p>;
+  }
 
   return (
     <div className="home-container">
       {/* Filtros de categorías */}
-      <div className="filters-container">
+      {/* <div className="filters-container">
         <CategoryFilters
           categories={categories}
           selectedCategories={selectedCategories}
           onCategorySelect={handleCategorySelect}
         />
-        <SuperCategoryFilters 
+        <SuperCategoryFilters
           superCategories={superCategories}
           selectedSuperCategories={selectedSuperCategories}
           onSuperCategorySelect={handleSuperCategorySelect}
         />
+      </div> */}
 
-        
-      </div>
-      
       {/* Lista de productos */}
       <ProductsList products={filteredProducts} />
     </div>
