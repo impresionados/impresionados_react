@@ -1,7 +1,7 @@
 import './CategoryFilters.css';
 
 interface CategoryFiltersProps {
-    categories: { _id: string; name: string }[];
+    categories: { id: string; name: string }[];
     selectedCategories: string[];
     onCategorySelect: (categoryName: string) => void;
   }
@@ -16,7 +16,7 @@ interface CategoryFiltersProps {
         <div className="title">Categorías</div>
         {categories.map((category) => (
           <button
-            key={category._id}
+            key={category.id}
             onClick={() => onCategorySelect(category.name)}
             className={`category-button ${
               selectedCategories.includes(category.name)

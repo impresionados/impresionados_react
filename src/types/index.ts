@@ -1,5 +1,5 @@
 export interface Product {
-  _id: string;
+  id: string;
   name: string;
   description: string;
   price: number;
@@ -10,14 +10,14 @@ export interface Product {
 }
 
 export interface User {
-  _id: string;
+  id: string;
   usuario: string;
   email: string;
   registration_date: string;
 }
 
 export interface Category {
-  _id: string;
+  id: string;
   name: string;
 }
 

@@ -5,21 +5,21 @@ import './Home.css';
 import { SuperCategoryFilters } from '../../components/SuperCategoryFilters/SuperCategoryFilters';
 
 export const Home: React.FC = () => {
-  const [categories] = useState<{ _id: string; name: string }[]>([
-    { _id: '1', name: 'Electrónica' },
-    { _id: '2', name: 'Ropa' },
-    { _id: '3', name: 'Deporte' },
+  const [categories] = useState<{ id: string; name: string }[]>([
+    { id: '1', name: 'Electrónica' },
+    { id: '2', name: 'Ropa' },
+    { id: '3', name: 'Deporte' },
   ]);
-  const [superCategories] = useState<{ _id: string; name: string }[]>([
-    { _id: '1', name: 'Vestimenta' },
-    { _id: '2', name: 'Pijama' },
-    { _id: '3', name: 'Totorota' },
+  const [superCategories] = useState<{ id: string; name: string }[]>([
+    { id: '1', name: 'Vestimenta' },
+    { id: '2', name: 'Pijama' },
+    { id: '3', name: 'Totorota' },
   ]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSuperCategories, setSelectedSuperCategories] = useState<string[]>([]);
   const [products] = useState([
     {
-      _id: '101',
+      id: '101',
       name: 'Camiseta',
       description: 'Ropa deportiva cómoda y de alta calidad',
       price: 19.99,
@@ -33,7 +33,7 @@ export const Home: React.FC = () => {
       ],
     },
     {
-      _id: '102',
+      id: '102',
       name: 'Auriculares',
       description: 'Auriculares inalámbricos con cancelación de ruido',
       price: 99.99,
@@ -47,7 +47,7 @@ export const Home: React.FC = () => {
       ],
     },
     {
-      _id: '103',
+      id: '103',
       name: 'Balón',
       description: 'Balón de fútbol profesional',
       price: 29.99,
@@ -62,7 +62,7 @@ export const Home: React.FC = () => {
       
     },
     {
-      _id: '104',
+      id: '104',
       name: 'Balón',
       description: 'Balón de fútbol profesional',
       price: 29.99,
@@ -77,7 +77,7 @@ export const Home: React.FC = () => {
       
     },
     {
-      _id: '105',
+      id: '105',
       name: 'Balón',
       description: 'Balón de fútbol profesional',
       price: 29.99,
@@ -92,7 +92,7 @@ export const Home: React.FC = () => {
       
     },
     {
-      _id: '106',
+      id: '106',
       name: 'Balón',
       description: 'Balón de fútbol profesional',
       price: 29.99,
@@ -107,7 +107,7 @@ export const Home: React.FC = () => {
       
     },
     {
-      _id: '107',
+      id: '107',
       name: 'Balón',
       description: 'Balón de fútbol profesional',
       price: 29.99,

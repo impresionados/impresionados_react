@@ -1,0 +1,16 @@
+import React from "react";
+import { useCartStore } from "../../store/cartStore"; // Asegúrate de importar correctamente
+
+export const CartDisplay: React.FC = () => {
+  const { items, total } = useCartStore(); // Extrae `items` y `total` desde la store
+
+  return (
+    <p>
+      {items.length > 0
+        ? items.map((item) => `${item.name} (x${item.quantity})`).join(", ") +
+          ` - Total: $${total.toFixed(2)}`
+        : "El carrito está vacío"}
+    </p>
+  );
+};
+

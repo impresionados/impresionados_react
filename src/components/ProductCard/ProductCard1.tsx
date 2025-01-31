@@ -34,7 +34,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <span className="product-price">${product.price}</span>
           <div className="product-actions">
             <Link
-              to={`/product/${product._id}`}
+              to={`/product/${product.id}`}
               className="product-action"
             >
               <Eye className="icon" />
