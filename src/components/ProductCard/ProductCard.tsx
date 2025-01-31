@@ -34,7 +34,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, context = 'st
       <div className="product-card">
         <Link to={`/product/${product.id}`} className="product-action">
           <ProductImage src={product.image || "../img/proximamente.png"} alt={product.name} />
-          console.log(product.image)
         </Link>
 
         <div className="product-details">
