@@ -1,0 +1,43 @@
+.container {
+  @apply min-h-screen flex;
+}
+
+.leftSide {
+  @apply w-1/2 bg-indigo-700 p-12 text-white flex flex-col justify-center;
+}
+
+.content {
+  @apply max-w-md mx-auto;
+}
+
+.logoContainer {
+  @apply flex items-center gap-2 mb-8;
+}
+
+.title {
+  @apply text-3xl font-bold;
+}
+
+.subtitle {
+  @apply text-2xl font-semibold mb-6;
+}
+
+.description {
+  @apply text-lg leading-relaxed opacity-90;
+}
+
+.imageContainer {
+  @apply mt-8;
+}
+
+.image {
+  @apply rounded-lg shadow-xl;
+}
+
+.divider {
+  @apply w-px bg-gray-200;
+}
+
+.rightSide {
+  @apply w-1/2 bg-white;
+}

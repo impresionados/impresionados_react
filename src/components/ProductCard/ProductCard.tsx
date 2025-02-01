@@ -18,7 +18,11 @@ interface Product {
   category: string[];
   image: string;
   super_tipo: string;
-  ratings:string;
+  ratings: Array<{
+    user: string;
+    score: number;
+    comment: string;
+  }>;
 }
 
 interface ProductCardProps {

@@ -19,31 +19,16 @@ export const ProductActions: React.FC<ProductActionsProps> = ({
 }) => {
   return (
     <div className="product-actions">
-      {context === 'store' && (
-        <>
-          {/* Botón de ver detalles */}
-
-          {/* Botón de añadir a la cesta */}
-          <ActionButton
-            onClick={onAction}
-            disabled={stock === 0}
-            className="add-to-cart"
-          >
-            <ShoppingCart className="icon" />
-          </ActionButton>
-        </>
-      )}
-      {context === 'cart' && (
-        <>
-          {/* Botón de eliminar del carrito */}
-          <ActionButton
-            onClick={onAction}
-            className="remove-from-cart"
-          >
-            <Trash className="icon" />
-          </ActionButton>
-        </>
-      )}
+      <>
+        <ActionButton
+          onClick={onAction}
+          disabled={stock === 0}
+          className="add-to-cart"
+        >
+          <ShoppingCart className="icon" />
+        </ActionButton>
+      </>
+      
     </div>
   );
 };

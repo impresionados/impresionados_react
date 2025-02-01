@@ -122,7 +122,7 @@ export const Home: React.FC = () => {
   if (loading) {
     return (
       <div className="loading-container">
-        <div className="loading-spinner"></div>
+        <div className="loading-spinner"><img src="https://i.postimg.cc/d17rw6vp/sinfondoo-sinletra.png" alt="Impresionados" /></div>
         <p>Cargando productos...</p>
       </div>
     );
