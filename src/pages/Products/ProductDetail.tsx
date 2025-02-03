@@ -83,7 +83,6 @@ export const ProductDetail: React.FC = () => {
             <p><strong>Calificación:</strong> ⭐ </p>
           </div>
           <button
-            disabled={product.stock === 0}
             onClick={() => addItem(product)}
             className="add-to-cart-details"
           >
