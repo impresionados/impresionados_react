@@ -17,6 +17,11 @@
 .inputGroup {
   @apply mt-1 relative;
 }
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
 
 .label {
   @apply block text-sm font-medium text-gray-700;
