@@ -23,15 +23,6 @@
 
 }
 
-.add-to-cart:disabled {
-  background-color: #cbd5e0; /* Gris claro */
-  cursor: not-allowed;
-}
-
-.add-to-cart:hover:not(:disabled) {
-  background-color: #2b6cb0; /* Azul más oscuro */
-}
-
 /* Botón de eliminar del carrito */
 .remove-from-cart {
   background-color: #e53e3e; /* Rojo-600 */

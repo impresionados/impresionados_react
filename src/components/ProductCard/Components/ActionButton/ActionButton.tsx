@@ -10,14 +10,12 @@ interface ActionButtonProps {
 
 export const ActionButton: React.FC<ActionButtonProps> = ({
   onClick,
-  disabled = false,
   className = '',
   children,
 }) => {
   return (
     <button
       onClick={onClick}
-      disabled={disabled}
       className={`action-button ${className}`}
     >
       {children}

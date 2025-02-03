@@ -33,7 +33,7 @@ const handlePurchase = async (items: { id: string; quantity: number; stock: numb
   try {
     for (const item of items) {
       console.log(`ID: ${item.id}, Cantidad: ${item.quantity}, Stock: ${item.stock}`);
-      const newStock = item.stock - item.quantity;
+      const newStock = Math.max(0, item.stock - item.quantity);
 
       await updateProductStock(item.id, newStock);
     }

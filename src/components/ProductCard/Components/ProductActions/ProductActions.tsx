@@ -22,7 +22,6 @@ export const ProductActions: React.FC<ProductActionsProps> = ({
       <>
         <ActionButton
           onClick={onAction}
-          disabled={stock === 0}
           className="add-to-cart"
         >
           <ShoppingCart className="icon" />
