@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Mail, Lock } from 'lucide-react';
+import { User, Mail, Lock, Phone, HomeIcon } from 'lucide-react';
 import Input from '../../components/Login-register/components/Input/Input';
 import Button from '../../components/Login-register/components/Button/Button';
 import Link from '../../components/Login-register/components/Link/Link';
@@ -26,13 +26,13 @@ export const RegisterForm = () => {
     }
 
     try {
-      const checkResponse = await fetch(`http://10.102.10.15:8001/users/${encodeURIComponent(email)}`);
+      const checkResponse = await fetch(`http://10.102.10.202:8001/users/${encodeURIComponent(email)}`);
       if (checkResponse.ok) {
         setEmailError('Este email ya está en uso');
         return;
       }
 
-      const response = await fetch(`http://10.102.10.15:8001/users/?user_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&address=${encodeURIComponent(address)}&phone=${encodeURIComponent(phone)}`, {
+      const response = await fetch(`http://10.102.10.202:8001/users/?user_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&address=${encodeURIComponent(address)}&tlf=${encodeURIComponent(phone)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -106,7 +106,7 @@ export const RegisterForm = () => {
             name="address"
             type="text"
             label="Dirección"
-            icon={Lock}
+            icon={HomeIcon}
             required
             placeholder="Inserta tu dirección"
             value={address}
@@ -118,7 +118,7 @@ export const RegisterForm = () => {
             name="phone"
             type="text"
             label="Teléfono"
-            icon={Lock}
+            icon={Phone}
             required
             placeholder="Inserta tu número de teléfono"
             value={phone}

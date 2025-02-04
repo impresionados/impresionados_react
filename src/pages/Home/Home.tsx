@@ -48,7 +48,7 @@ export const Home: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://10.102.10.15:8001/products/');
+        const response = await fetch('http://10.102.10.202:8001/products/');
         const data = await response.json();
         setProducts(data);
       } catch (err) {
@@ -69,7 +69,7 @@ export const Home: React.FC = () => {
       await Promise.all(
         products.map(async (product) => {
           try {
-            const response = await fetch(`http://10.102.10.15:8001/products/${product.id}/image`);
+            const response = await fetch(`http://10.102.10.202:8001/products/${product.id}/image`);
             const blob = await response.blob();
             images[product.id] = URL.createObjectURL(blob);
           } catch (err) {
