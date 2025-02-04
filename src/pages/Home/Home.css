@@ -1,0 +1,87 @@
+/* Contenedor principal */
+.home-container {
+    padding: 2rem 1rem;
+  }
+  
+  /* Contenedor de los filtros */
+  .filters-container {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50%;
+  }
+  
+  /* Categorías */
+  .categories-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .category-button {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    background-color: #e2e8f0; /* Gray-200 */
+    color: #4a5568; /* Gray-700 */
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .category-button:hover {
+    background-color: #cbd5e0; /* Gray-300 */
+  }
+  
+  .category-button-active {
+    background-color: #3182ce; /* Blue-600 */
+    color: white;
+  }
+  
+  /* Contenedor de productos */
+  .products-container {
+    display: grid; /* Usamos CSS Grid */
+    grid-template-columns: repeat(3 , 1fr); /* Siempre 3 columnas de igual ancho */
+    gap: 1.5rem; /* Separación entre elementos */
+    margin-top: 1rem; /* Separación superior */
+  }
+  
+  
+  /* Loading */
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    
+  }
+
+  .loading-container p{
+    background: linear-gradient(
+      to right, 
+      #0D8C8C, /* Azul marino */
+      #04BF9D, /* Azul claro */
+      #DCBE0E, /* Amarillo */
+      #D97D0D  /* Naranja */
+    );
+    -webkit-background-clip: text; /* Usa el fondo solo dentro del texto */
+    -webkit-text-fill-color: transparent; /* Hace transparente el texto para mostrar el fondo */
+    font-weight: bold; /* Opcional: Hacer el texto más grueso para resaltar el degradado */
+  }
+  
+  .loading-spinner {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+  

@@ -1,0 +1,42 @@
+.product-actions {
+  display: flex; /* Botones alineados en fila */
+  gap: 1rem; /* Separación entre botones */
+  margin-top: 1rem; /* Separación superior */
+  justify-content: flex-end; /* Alinea los elementos a la derecha */
+  align-items: center;
+
+}
+
+/* Botón de añadir a la cesta */
+.add-to-cart {
+  background-color: #3182ce; /* Azul-600 */
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem; /* Bordes redondeados */
+  border: none;
+  cursor: pointer;
+  display: flex; /* Centrado del ícono */
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease-in-out;
+  width: 15%;
+
+}
+
+/* Botón de eliminar del carrito */
+.remove-from-cart {
+  background-color: #e53e3e; /* Rojo-600 */
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.remove-from-cart:hover {
+  background-color: #c53030; /* Rojo más oscuro */
+}

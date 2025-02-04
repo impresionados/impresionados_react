@@ -1,0 +1,27 @@
+/* src/components/Cart/Components/QuantityControls.css */
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .quantity-button {
+    background-color: #e5e7eb;
+    color: #374151;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .quantity-button:hover {
+    background-color: #d1d5db;
+  }
+  
+  .quantity-display {
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  

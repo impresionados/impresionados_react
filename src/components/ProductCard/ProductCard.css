@@ -1,0 +1,26 @@
+/* Estilo general de la tarjeta */
+.product-card {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out;
+
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+}
+
+/* Contenedor de los detalles del producto */
+.product-details {
+  padding: 1rem;
+}
+
+/* Nombre del producto */
+.product-name {
+  font-size: 1.125rem; /* 18px */
+  font-weight: 600;
+  color: #2d3748; /* Gris-800 */
+}
+

@@ -1,0 +1,14 @@
+.product-categories {
+  display: flex;
+  flex-wrap: wrap; /* Permite que las categorías se ajusten en varias líneas */
+  gap: 0.25rem; /* Separación entre categorías */
+  margin-top: 0.5rem; /* Separación superior */
+}
+
+.product-category {
+  font-size: 0.75rem; /* Tamaño de texto pequeño */
+  background-color: #ebf8ff; /* Fondo azul claro */
+  color: #2b6cb0; /* Azul-800 */
+  padding: 0.25rem 0.5rem; /* Espaciado interno */
+  border-radius: 9999px; /* Bordes redondeados (círculo completo) */
+}
