@@ -24,6 +24,7 @@ export const useCartStore = create<CartStore>((set) => ({
               : item
           ),
           total: state.total + product.price,
+          
         };
       }
       return {
@@ -31,11 +32,22 @@ export const useCartStore = create<CartStore>((set) => ({
         total: state.total + product.price,
       };
     }),
-  removeItem: (productId) =>
-    set((state) => ({
-      items: state.items.filter((item) => item.id !== productId),
-      total: state.total - (state.items.find((item) => item.id === productId)?.price ?? 0),
-    })),
+    removeItem: (productId) =>
+      set((state) => {
+    
+          // Filtra los ítems, eliminando todas las ocurrencias del productId
+          const itemsFiltrados = state.items.filter((item) => item.id !== productId);
+    
+          // Calcular la cantidad total eliminada correctamente
+          const totalEliminado = state.items
+              .filter((item) => item.id === productId)
+              .reduce((acc, item) => acc + (item.price * item.quantity), 0);
+        
+          return {
+              items: itemsFiltrados,
+              total: Math.max(0, state.total - totalEliminado), // Asegurar que el total no sea negativo
+          };
+      }),
   updateQuantity: (productId, quantity) =>
     set((state) => ({
       items: state.items.map((item) =>

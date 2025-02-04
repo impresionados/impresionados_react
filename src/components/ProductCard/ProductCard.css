@@ -5,6 +5,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: transform 0.2s ease-in-out;
+
 }
 
 .product-card:hover {
@@ -22,3 +23,4 @@
   font-weight: 600;
   color: #2d3748; /* Gris-800 */
 }
+

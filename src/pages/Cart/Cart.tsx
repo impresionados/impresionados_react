@@ -1,12 +1,11 @@
-// src/components/Cart/CartDisplay.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCartStore } from "../../store/cartStore";
 import CartItem from "../../components/Cart/CartItem";
 import './Cart.css';
 
 const updateProductStock = async (productId: string, newStock: number) => {
   try {
-    const response = await fetch(`http://localhost:8001/products/${productId}/stock?new_stock=${newStock}`, { // ✅ Ahora enviamos new_stock en la URL
+    const response = await fetch(`http://localhost:8001/products/${productId}/stock?new_stock=${newStock}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -26,22 +25,22 @@ const updateProductStock = async (productId: string, newStock: number) => {
   }
 };
 
-
-
-
-const handlePurchase = async (items: { id: string; quantity: number; stock: number }[], clearCart: () => void, setShowPopup: (value: boolean) => void) => {
+const handlePurchase = async (
+  items: { id: string; quantity: number; stock: number }[],
+  clearCart: () => void,
+  setShowPopup: (value: boolean) => void
+) => {
   try {
     for (const item of items) {
       console.log(`ID: ${item.id}, Cantidad: ${item.quantity}, Stock: ${item.stock}`);
       const newStock = Math.max(0, item.stock - item.quantity);
-
       await updateProductStock(item.id, newStock);
     }
 
     console.log("Compra completada. Stock actualizado.");
     clearCart();
     setShowPopup(true);
-    setTimeout(() => setShowPopup(false), 1500); // Cierra el popup después de 3 segundos
+    setTimeout(() => setShowPopup(false), 1500);
   } catch (error) {
     console.error("Error en la compra:", error);
   }
@@ -50,6 +49,35 @@ const handlePurchase = async (items: { id: string; quantity: number; stock: numb
 export const CartDisplay: React.FC = () => {
   const { items, total, clearCart } = useCartStore();
   const [showPopup, setShowPopup] = useState(false);
+  const [productImages, setProductImages] = useState<{ [key: string]: string }>({});
+
+  // Efecto para cargar las imágenes de los productos en el carrito
+  useEffect(() => {
+    const fetchImages = async () => {
+      const images: { [key: string]: string } = {};
+
+      await Promise.all(
+        items.map(async (item) => {
+          try {
+            const response = await fetch(`http://localhost:8001/products/${item.id}/image`);
+            if (!response.ok) throw new Error("No se pudo obtener la imagen");
+
+            const blob = await response.blob();
+            images[item.id] = URL.createObjectURL(blob);
+          } catch (err) {
+            console.error(`⚠️ Error al obtener imagen del producto ${item.id}:`, err);
+            images[item.id] = "../img/proximamente.png"; // Imagen por defecto si falla
+          }
+        })
+      );
+
+      setProductImages(images);
+    };
+
+    if (items.length > 0) {
+      fetchImages();
+    }
+  }, [items]); // Se ejecuta cuando cambian los productos en el carrito
 
   return (
     <div className="cart-container">
@@ -61,7 +89,7 @@ export const CartDisplay: React.FC = () => {
               <CartItem 
                 id={item.id}
                 name={item.name}
-                image={item.image}
+                image={productImages[item.id] || "../img/proximamente.png"} // Usa la imagen cargada o una por defecto
                 price={item.price}
                 quantity={item.quantity}
               />
@@ -72,7 +100,16 @@ export const CartDisplay: React.FC = () => {
               Total: ${total.toFixed(2)}
             </div>
             <div className="buy">
-              <button onClick={() => handlePurchase(items.map(({ id, quantity, stock }) => ({ id, quantity, stock })), clearCart, setShowPopup)} className="checkout-button">Comprar</button>
+              <button 
+                onClick={() => handlePurchase(
+                  items.map(({ id, quantity, stock }) => ({ id, quantity, stock })), 
+                  clearCart, 
+                  setShowPopup
+                )} 
+                className="checkout-button"
+              >
+                Comprar
+              </button>
             </div>
           </div>
         </div>

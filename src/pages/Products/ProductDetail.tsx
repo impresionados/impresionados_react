@@ -77,7 +77,17 @@ export const ProductDetail: React.FC = () => {
         <div className="product-info">
           <div className="details">
             <p><strong>Precio:</strong> ${product.price.toFixed(2)}</p>
-            <p><strong>Stock:</strong> {product.stock} unidades disponibles</p>
+            
+            {product.stock == 0 ? (
+              <p>
+                <strong>Stock:</strong> En producción... {/*<br/>- El pedido podría tardar más de lo esperado.*/}
+              </p>
+            ) : (
+              <p>
+                <strong>Stock:</strong> {product.stock} unidades disponibles.
+              </p>
+            )}
+
             <p><strong>Categorías:</strong> {product.category.join(', ')}</p>
             <p><strong>Super Tipo:</strong> {product.super_tipo}</p>
             <p><strong>Calificación:</strong> ⭐ </p>

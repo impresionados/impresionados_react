@@ -8,5 +8,5 @@ interface ProductImageProps {
 
 
 export const ProductImage: React.FC<ProductImageProps> = ({ src, alt }) => {
-  return <img src={src} alt={alt} className="product-image" />;
+  return <div className='product-image-container'><img src={src} alt={alt} className="product-image" /></div>;
 };

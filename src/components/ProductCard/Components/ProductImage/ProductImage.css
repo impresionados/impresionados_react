@@ -1,6 +1,26 @@
+.product-image-container {
+  position: relative; /* Necesario para que la imagen de fondo esté detrás */
+  width: 100%; /* Ocupará todo el ancho */
+  height: 50%; /* 50% del alto de la ventana o del contenedor padre */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Evita que el contenido sobresalga */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  
+}
+
+
+/* Imagen principal bien ajustada */
 .product-image {
-  width: 100%;
-  height: 12rem; /* Altura fija para imágenes */
-  object-fit: cover; /* Asegura que la imagen no se deforme */
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Línea divisoria debajo de la imagen */
+  /* width: auto;
+  height: 100%; */
+  object-fit: contain; /* La imagen se ajusta sin recortar */
+  position: relative;
+  z-index: 1; /* Se mantiene sobre el fondo */
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
