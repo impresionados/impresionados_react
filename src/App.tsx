@@ -5,6 +5,7 @@ import { RegisterForm } from './pages/RegisterForm/RegisterForm';
 import { Profile } from './pages/Profile/Profile';
 import { Navbar } from './components/Navbar/Navbar';
 import { Home } from './pages/Home/Home';
+import { CartDisplay } from './pages/Cart/Cart';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<any>(null);
@@ -26,6 +27,7 @@ const App: React.FC = () => {
             <Route path="/login" element={<LoginForm setUser={setUser} />} /> {/* Aquí le pasas setUser */}
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/profile" element={<Profile user={user} />} />
+            <Route path="/cart" element={<CartDisplay/>} />
           </Routes>
         </div>
       </div>
