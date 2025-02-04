@@ -46,6 +46,3 @@
 .link {
   @apply font-medium text-indigo-600 hover:text-indigo-500;
 }
-.pepe{
-  background-color: #000;
-}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Mail, Lock, Phone, HomeIcon } from 'lucide-react';
+import { User, Mail, Lock, Phone, HomeIcon, CreditCard, DollarSign, Bank } from 'lucide-react';
 import Input from '../../components/Login-register/components/Input/Input';
 import Button from '../../components/Login-register/components/Button/Button';
 import Link from '../../components/Login-register/components/Link/Link';
@@ -12,6 +12,7 @@ export const RegisterForm = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('tarjeta'); // Estado del método de pago
   const [error, setError] = useState('');
   const [emailError, setEmailError] = useState('');
 
@@ -42,7 +43,7 @@ export const RegisterForm = () => {
       }
 
       alert('Registro exitoso');
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message);
     }
   };
@@ -125,18 +126,45 @@ export const RegisterForm = () => {
             onChange={(e) => setPhone(e.target.value)}
           />
 
+          {/* 🔹 Selección de método de pago */}
+          <div className={styles.paymentContainer}>
+            <label className={styles.paymentLabel}>Método de pago:</label>
+            <div className={styles.paymentOptions}>
+              <label className={styles.radioOption}>
+              Tarjeta de crédito/débito 
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="tarjeta"
+                  checked={paymentMethod === 'tarjeta'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <CreditCard size={16} />
+              </label>
+              <label className={styles.radioOption}>
+              PayPal 
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="paypal"
+                  checked={paymentMethod === 'paypal'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <DollarSign size={16} /> 
+              </label>
+
+              
+            </div>
+          </div>
+
           {error && <p className={styles.error}>{error}</p>}
 
-          <Button type="submit">
-            Registrarse
-          </Button>
+          <Button type="submit">Registrarse</Button>
         </form>
 
         <p className={styles.footer}>
           ¿Ya tienes una cuenta?{' '}
-          <Link href="/profile">
-            Iniciar sesión
-          </Link>
+          <Link href="/profile">Iniciar sesión</Link>
         </p>
       </div>
     </div>
