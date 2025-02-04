@@ -33,7 +33,7 @@ export const LoginForm = ({ setUser }: { setUser: (user: any) => void }) => {
       // Almacenar el usuario en el estado global usando setUser
       setUser({
         email: user.email,
-        phone: user.phone,
+        phone: user.tlf,
         address: user.address,
       });
 
@@ -41,7 +41,7 @@ export const LoginForm = ({ setUser }: { setUser: (user: any) => void }) => {
       alert('Inicio de sesión exitoso');
 
       // Redirigir a la ventana principal
-      navigate('/home');
+      navigate('/profile');
     } catch (error: any) {
       setError(error.message);
     }
@@ -78,9 +78,9 @@ export const LoginForm = ({ setUser }: { setUser: (user: any) => void }) => {
 
           {error && <p className={styles.error}>{error}</p>}
 
-          <Link href="#" isExternal>
+          {/* <Link href="#" isExternal>
             ¿Olvidaste tu contraseña?
-          </Link>
+          </Link> */}
 
           <Button type="submit">Iniciar sesión</Button>
         </form>

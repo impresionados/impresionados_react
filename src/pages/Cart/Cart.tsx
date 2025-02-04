@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useCartStore } from "../../store/cartStore";
-import CartItem from "../../components/Cart/CartItem";
+import {CartItem} from "../../components/Cart/CartItem";
+import {PaymentMethodSelect} from "../../components/Cart/PaymentMethodSelect";
+
 import './Cart.css';
 
 const updateProductStock = async (productId: string, newStock: number) => {
@@ -97,6 +99,7 @@ export const CartDisplay: React.FC = () => {
             </div>
           ))}
           <div className="final">
+            <PaymentMethodSelect/>
             <div className="cart-total">
               Total: ${total.toFixed(2)}
             </div>

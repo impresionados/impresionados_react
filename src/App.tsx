@@ -28,7 +28,7 @@ const App: React.FC = () => {
             <Route path='/product/:productId' element={<ProductDetail />}/>
             <Route path="/login" element={<LoginForm setUser={setUser} />} /> {/* Aquí le pasas setUser */}
             <Route path="/register" element={<RegisterForm />} />
-            <Route path="/profile" element={<Profile user={user} />} />
+            <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
             <Route path="/cart" element={<CartDisplay/>} />
           </Routes>
         </div>

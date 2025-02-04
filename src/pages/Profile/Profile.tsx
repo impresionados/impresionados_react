@@ -2,9 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Profile.css'; // Importa el archivo CSS
 
-export const Profile = ({ user }: { user: any }) => {
+export const Profile = ({ user, setUser }: { user: any; setUser: any }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);  // Para manejar el estado de carga
+
+  const clearUser = () => {
+    setUser(null); // Elimina el usuario del estado global
+    localStorage.removeItem("user"); // Elimina el usuario del almacenamiento local
+    navigate('/login'); // Redirige al login después de cerrar sesión
+  };
 
   useEffect(() => {
     if (!user) {
@@ -25,22 +31,22 @@ export const Profile = ({ user }: { user: any }) => {
 
         <div className="profile-info">
           <h3 className="profile-info-label">Correo electrónico:</h3>
-          <p className="profile-info-value">{user.email}</p>
+          <p className="profile-info-value">{user?.email}</p>
         </div>
 
         <div className="profile-info">
           <h3 className="profile-info-label">Teléfono:</h3>
-          <p className="profile-info-value">{user.phone}</p>
+          <p className="profile-info-value">{user?.phone}</p>
         </div>
 
         <div className="profile-info">
           <h3 className="profile-info-label">Dirección:</h3>
-          <p className="profile-info-value">{user.address}</p>
+          <p className="profile-info-value">{user?.address}</p>
         </div>
 
         <div className="mt-8 text-center">
           <button
-            onClick={() => alert('Cerrar sesión')}
+            onClick={clearUser}
             className="logout-button"
           >
             Cerrar sesión

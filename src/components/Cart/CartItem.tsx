@@ -14,7 +14,7 @@ interface CartItemProps {
   quantity: number;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ id, name, image, price, quantity }) => {
+export const CartItem: React.FC<CartItemProps> = ({ id, name, image, price, quantity }) => {
   const { removeItem } = useCartStore();
 
   return (
@@ -51,4 +51,3 @@ const CartItem: React.FC<CartItemProps> = ({ id, name, image, price, quantity })
   );
 };
 
-export default CartItem;
