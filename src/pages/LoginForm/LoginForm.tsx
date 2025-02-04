@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mail, Lock } from 'lucide-react';
 import Input from '../../components/Login-register/components/Input/Input';
 import Button from '../../components/Login-register/components/Button/Button';
@@ -10,26 +10,36 @@ export const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    const storedEmail = sessionStorage.getItem('userEmail');
+    if (storedEmail) {
+      setEmail(storedEmail);
+    }
+  }, []);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     try {
-      // Obtener usuario por email
-      const response = await fetch(`http://localhost:8001/users/${encodeURIComponent(email)}`);
+      const response = await fetch(`http://10.102.10.15::8001/users/${encodeURIComponent(email)}`);
       if (!response.ok) {
         throw new Error('Usuario no encontrado');
       }
 
       const user = await response.json();
 
-      // Validar contraseña
       if (user.password !== password) {
         setError('Contraseña incorrecta');
         return;
       }
 
-      // Inicio de sesión exitoso
+      // Guardar los datos en sessionStorage
+      sessionStorage.setItem('userEmail', email);
+      sessionStorage.setItem('userPassword', password);  
+      sessionStorage.setItem('userPhone', user.phone);  
+      sessionStorage.setItem('userAddress', user.address);  
+
       console.log('Inicio de sesión exitoso', user);
       alert('Inicio de sesión exitoso');
       

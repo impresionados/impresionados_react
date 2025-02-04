@@ -1,31 +1,41 @@
+// App.tsx
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Navbar } from './components/Navbar/Navbar';
-import { Home } from './pages/Home/Home';
-import { ProductDetail } from "./pages/Products/ProductDetail";
-import { CartDisplay } from './pages/Cart/Cart';
-import { Profile } from './pages/Profile/Profile';
 import { LoginForm } from './pages/LoginForm/LoginForm';
 import { RegisterForm } from './pages/RegisterForm/RegisterForm';
-// import { ProductDetails } from './pages/ProductDetails';
+import { Profile } from './pages/Profile/Profile';
+import { Home } from './pages/Home/Home'; // Importa el componente Home
 
-function App() {
+const App = () => {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const storedEmail = sessionStorage.getItem('userEmail');
+    if (storedEmail) {
+      setUser({ email: storedEmail });
+    }
+  }, []);
+
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        <div className="pt-16 px-4 max-w-7xl mx-auto">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            {/* <Route path='/profile' element={<Profile />}/> */}
-            <Route path='/product/:productId' element={<ProductDetail />}/>
-            <Route path='/cart' element={<CartDisplay/>}/>
-            <Route path='/profile' element={<LoginForm />}/>
-            <Route path='/register' element={<RegisterForm />}/>
-          </Routes>
-        </div>
-      </div>
+      <Routes>
+        {/* Ruta de la página principal */}
+        <Route path="/" element={<Home />} />
+
+        {/* Ruta para el login */}
+        <Route path="/login" element={<LoginForm />} />
+
+        {/* Ruta para el registro */}
+        <Route path="/register" element={<RegisterForm />} />
+
+        {/* Ruta para el perfil */}
+        <Route
+          path="/profile"
+          element={user ? <Profile user={user} /> : <Home />} // Redirige al home si no hay usuario
+        />
+      </Routes>
     </Router>
   );
-}
+};
 
 export default App;

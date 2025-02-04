@@ -1,44 +1,28 @@
-import React from 'react';
-import './Profile.css';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export const Profile: React.FC = () => {
-  // Simulación de un usuario
-  const user = {
-    name: 'Juan Pérez',
-    email: 'juan.perez@example.com',
-    avatar: 'https://via.placeholder.com/150', // URL de imagen de avatar
-  };
+export const Profile = ({ user }: { user: any }) => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);  // Para manejar el estado de carga
 
-  const handleLogout = () => {
-    console.log('Cerrar sesión');
-    // Aquí puedes implementar la lógica para cerrar sesión
-  };
+  useEffect(() => {
+    if (!user) {
+      navigate('/login'); // Redirige al login si no hay usuario autenticado
+    } else {
+      setLoading(false);  // Si el usuario está presente, se detiene la carga
+    }
+  }, [user, navigate]);
 
-  const handleEditProfile = () => {
-    console.log('Editar perfil');
-    // Aquí puedes implementar la lógica para editar el perfil
-  };
+  if (loading) {
+    return <p>Cargando...</p>;  // Muestra un mensaje de carga hasta que se valide la sesión
+  }
 
   return (
-    <div className="profile-container">
-      {/* Contenedor de avatar e información */}
-      <div className="profile-header">
-        <img src={user.avatar} alt="Avatar" className="profile-avatar" />
-        <div className="profile-info">
-          <h1 className="profile-name">{user.name}</h1>
-          <p className="profile-email">{user.email}</p>
-        </div>
-      </div>
-
-      {/* Botones de acciones */}
-      <div className="profile-actions">
-        <button className="profile-button edit-button" onClick={handleEditProfile}>
-          Editar Perfil
-        </button>
-        <button className="profile-button logout-button" onClick={handleLogout}>
-          Cerrar Sesión
-        </button>
-      </div>
+    <div>
+      <h2>Perfil de Usuario</h2>
+      <p><strong>Email:</strong> {user.email}</p>
+      <p><strong>Teléfono:</strong> {user.phone}</p>
+      <p><strong>Dirección:</strong> {user.address}</p>
     </div>
   );
 };
