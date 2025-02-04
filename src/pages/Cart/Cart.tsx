@@ -5,7 +5,7 @@ import './Cart.css';
 
 const updateProductStock = async (productId: string, newStock: number) => {
   try {
-    const response = await fetch(`http://10.102.10.15::8001/products/${productId}/stock?new_stock=${newStock}`, { // ✅ Ahora enviamos new_stock en la URL
+    const response = await fetch(`http://10.102.10.15:8001/products/${productId}/stock?new_stock=${newStock}`, { // ✅ Ahora enviamos new_stock en la URL
 
       method: "PUT",
       headers: {

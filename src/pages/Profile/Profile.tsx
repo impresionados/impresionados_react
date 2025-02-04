@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Profile.css'; // Importa el archivo CSS
 
 export const Profile = ({ user }: { user: any }) => {
   const navigate = useNavigate();
@@ -14,15 +15,38 @@ export const Profile = ({ user }: { user: any }) => {
   }, [user, navigate]);
 
   if (loading) {
-    return <p>Cargando...</p>;  // Muestra un mensaje de carga hasta que se valide la sesión
+    return <p className="text-center mt-10 text-xl text-gray-500">Cargando...</p>;  // Muestra un mensaje de carga hasta que se valide la sesión
   }
 
   return (
-    <div>
-      <h2>Perfil de Usuario</h2>
-      <p><strong>Email:</strong> {user.email}</p>
-      <p><strong>Teléfono:</strong> {user.phone}</p>
-      <p><strong>Dirección:</strong> {user.address}</p>
+    <div className="profile-container">
+      <div className="profile-card">
+        <h2 className="profile-title">Perfil de Usuario</h2>
+
+        <div className="profile-info">
+          <h3 className="profile-info-label">Correo electrónico:</h3>
+          <p className="profile-info-value">{user.email}</p>
+        </div>
+
+        <div className="profile-info">
+          <h3 className="profile-info-label">Teléfono:</h3>
+          <p className="profile-info-value">{user.phone}</p>
+        </div>
+
+        <div className="profile-info">
+          <h3 className="profile-info-label">Dirección:</h3>
+          <p className="profile-info-value">{user.address}</p>
+        </div>
+
+        <div className="mt-8 text-center">
+          <button
+            onClick={() => alert('Cerrar sesión')}
+            className="logout-button"
+          >
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

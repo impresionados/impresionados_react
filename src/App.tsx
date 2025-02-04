@@ -1,12 +1,12 @@
-// App.tsx
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LoginForm } from './pages/LoginForm/LoginForm';
 import { RegisterForm } from './pages/RegisterForm/RegisterForm';
 import { Profile } from './pages/Profile/Profile';
-import { Home } from './pages/Home/Home'; // Importa el componente Home
+import { Navbar } from './components/Navbar/Navbar';
+import { Home } from './pages/Home/Home';
 
-const App = () => {
+const App: React.FC = () => {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
@@ -18,22 +18,17 @@ const App = () => {
 
   return (
     <Router>
-      <Routes>
-        {/* Ruta de la página principal */}
-        <Route path="/" element={<Home />} />
-
-        {/* Ruta para el login */}
-        <Route path="/login" element={<LoginForm />} />
-
-        {/* Ruta para el registro */}
-        <Route path="/register" element={<RegisterForm />} />
-
-        {/* Ruta para el perfil */}
-        <Route
-          path="/profile"
-          element={user ? <Profile user={user} /> : <Home />} // Redirige al home si no hay usuario
-        />
-      </Routes>
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="pt-16 px-4 max-w-7xl mx-auto">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginForm setUser={setUser} />} /> {/* Aquí le pasas setUser */}
+            <Route path="/register" element={<RegisterForm />} />
+            <Route path="/profile" element={<Profile user={user} />} />
+          </Routes>
+        </div>
+      </div>
     </Router>
   );
 };

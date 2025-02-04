@@ -32,7 +32,7 @@ export const RegisterForm = () => {
         return;
       }
 
-      const response = await fetch(`http://10.102.10.15::8001/users/?user_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&address=${encodeURIComponent(address)}&phone=${encodeURIComponent(phone)}`, {
+      const response = await fetch(`http://10.102.10.15:8001/users/?user_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&address=${encodeURIComponent(address)}&phone=${encodeURIComponent(phone)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });

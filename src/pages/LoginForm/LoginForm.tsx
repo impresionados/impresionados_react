@@ -1,28 +1,24 @@
-import React, { useState, useEffect } from 'react';
+// src/pages/Login/LoginForm.tsx
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Mail, Lock } from 'lucide-react';
 import Input from '../../components/Login-register/components/Input/Input';
 import Button from '../../components/Login-register/components/Button/Button';
 import Link from '../../components/Login-register/components/Link/Link';
 import styles from './LoginForm.module.css';
 
-export const LoginForm = () => {
+export const LoginForm = ({ setUser }: { setUser: (user: any) => void }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    const storedEmail = sessionStorage.getItem('userEmail');
-    if (storedEmail) {
-      setEmail(storedEmail);
-    }
-  }, []);
+  const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     try {
-      const response = await fetch(`http://10.102.10.15::8001/users/${encodeURIComponent(email)}`);
+      const response = await fetch(`http://10.102.10.15:8001/users/${encodeURIComponent(email)}`);
       if (!response.ok) {
         throw new Error('Usuario no encontrado');
       }
@@ -34,16 +30,19 @@ export const LoginForm = () => {
         return;
       }
 
-      // Guardar los datos en sessionStorage
-      sessionStorage.setItem('userEmail', email);
-      sessionStorage.setItem('userPassword', password);  
-      sessionStorage.setItem('userPhone', user.phone);  
-      sessionStorage.setItem('userAddress', user.address);  
+      // Almacenar el usuario en el estado global usando setUser
+      setUser({
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+      });
 
       console.log('Inicio de sesión exitoso', user);
       alert('Inicio de sesión exitoso');
-      
-    } catch (error) {
+
+      // Redirigir a la ventana principal
+      navigate('/home');
+    } catch (error: any) {
       setError(error.message);
     }
   };
@@ -79,20 +78,16 @@ export const LoginForm = () => {
 
           {error && <p className={styles.error}>{error}</p>}
 
-          <Link href="#" isExternal> 
+          <Link href="#" isExternal>
             ¿Olvidaste tu contraseña?
           </Link>
-          
-          <Button type="submit">
-            Iniciar sesión
-          </Button>
+
+          <Button type="submit">Iniciar sesión</Button>
         </form>
 
         <p className={styles.footer}>
           ¿No tienes una cuenta?{' '}
-          <Link href="/register">
-            Registrarse
-          </Link>
+          <Link href="/register">Registrarse</Link>
         </p>
       </div>
     </div>
