@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LoginForm } from './pages/LoginForm/LoginForm';
 import { RegisterForm } from './pages/RegisterForm/RegisterForm';
+import { ProductDetail } from "./pages/Products/ProductDetail";
 import { Profile } from './pages/Profile/Profile';
 import { Navbar } from './components/Navbar/Navbar';
 import { Home } from './pages/Home/Home';
@@ -24,6 +25,7 @@ const App: React.FC = () => {
         <div className="pt-16 px-4 max-w-7xl mx-auto">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path='/product/:productId' element={<ProductDetail />}/>
             <Route path="/login" element={<LoginForm setUser={setUser} />} /> {/* Aquí le pasas setUser */}
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/profile" element={<Profile user={user} />} />
