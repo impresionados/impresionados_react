@@ -3,7 +3,11 @@ import { SearchBar } from './componts/SearchBar';
 import { NavLinks } from './componts/NavbarLinks';
 import './Navbar.css';
 
-export const Navbar: React.FC = () => {
+interface NavbarProps {
+  user: any;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ user }) => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -11,7 +15,7 @@ export const Navbar: React.FC = () => {
           <Logo />
           <div className="navbar-links">
             <SearchBar />
-            <NavLinks />
+            <NavLinks user={user} /> {/* ✅ Pasamos `user` a NavLinks */}
           </div>
         </div>
       </div>

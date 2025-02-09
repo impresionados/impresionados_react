@@ -1,4 +1,3 @@
-// src/pages/Login/LoginForm.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock } from 'lucide-react';
@@ -18,7 +17,7 @@ export const LoginForm = ({ setUser }: { setUser: (user: any) => void }) => {
     setError('');
 
     try {
-      const response = await fetch(`http://localhost:8001/users/${encodeURIComponent(email)}`);
+      const response = await fetch(`http://192.168.1.133:8001/users/${encodeURIComponent(email)}`);
       if (!response.ok) {
         throw new Error('Usuario no encontrado');
       }
@@ -30,12 +29,18 @@ export const LoginForm = ({ setUser }: { setUser: (user: any) => void }) => {
         return;
       }
 
-      // Almacenar el usuario en el estado global usando setUser
-      setUser({
+      // Crear objeto de usuario con datos importantes
+      const userData = {
         email: user.email,
         phone: user.tlf,
         address: user.address,
-      });
+      };
+
+      // Guardar en estado global
+      setUser(userData);
+
+      // Guardar en localStorage para persistencia
+      localStorage.setItem('user', JSON.stringify(userData));
 
       console.log('Inicio de sesión exitoso', user);
       alert('Inicio de sesión exitoso');
@@ -77,11 +82,6 @@ export const LoginForm = ({ setUser }: { setUser: (user: any) => void }) => {
           />
 
           {error && <p className={styles.error}>{error}</p>}
-
-          {/* <Link href="#" isExternal>
-            ¿Olvidaste tu contraseña?
-          </Link> */}
-
           <Button type="submit">Iniciar sesión</Button>
         </form>
 

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { User, Mail, Lock, Phone, HomeIcon, CreditCard, DollarSign, Bank } from 'lucide-react';
+import { User, Mail, Lock, Phone, HomeIcon, CreditCard, DollarSign } from 'lucide-react';
 import Input from '../../components/Login-register/components/Input/Input';
 import Button from '../../components/Login-register/components/Button/Button';
 import Link from '../../components/Login-register/components/Link/Link';
 import styles from './RegisterForm.module.css';
+import { useNavigate } from 'react-router-dom';
+
 
 export const RegisterForm = () => {
   const [name, setName] = useState('');
@@ -15,6 +17,8 @@ export const RegisterForm = () => {
   const [paymentMethod, setPaymentMethod] = useState('tarjeta'); // Estado del método de pago
   const [error, setError] = useState('');
   const [emailError, setEmailError] = useState('');
+  const navigate = useNavigate();
+  
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,13 +31,13 @@ export const RegisterForm = () => {
     }
 
     try {
-      const checkResponse = await fetch(`http://localhost:8001/users/${encodeURIComponent(email)}`);
+      const checkResponse = await fetch(`http://192.168.1.133:8001/users/${encodeURIComponent(email)}`);
       if (checkResponse.ok) {
         setEmailError('Este email ya está en uso');
         return;
       }
 
-      const response = await fetch(`http://localhost:8001/users/?user_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&address=${encodeURIComponent(address)}&tlf=${encodeURIComponent(phone)}`, {
+      const response = await fetch(`http://192.168.1.133:8001/users/?user_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&address=${encodeURIComponent(address)}&tlf=${encodeURIComponent(phone)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -43,6 +47,8 @@ export const RegisterForm = () => {
       }
 
       alert('Registro exitoso');
+      navigate('/login');
+
     } catch (err: any) {
       setError(err.message);
     }

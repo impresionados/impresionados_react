@@ -1,25 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { CategoryFilters } from '../../components/CategoryFilters/CategoryFilters';
 import { ProductsList } from '../../components/ProductList/ProductList';
 import './Home.css';
-import { SuperCategoryFilters } from '../../components/SuperCategoryFilters/SuperCategoryFilters';
-
-const categories = [
-  { id: '1', name: 'Electrónica' },
-  { id: '2', name: 'Ropa' },
-  { id: '3', name: 'Deporte' },
-];
-
-const superCategories = [
-  { id: '1', name: 'Vestimenta' },
-  { id: '2', name: 'Pijama' },
-  { id: '3', name: 'Totorota' },
-];
-
-const defaultImage = "/images/default-image.png";
-
-
-
 
 interface Product {
   id: string;
@@ -41,16 +22,32 @@ export const Home: React.FC = () => {
   const [productImages, setProductImages] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedSuperCategories, setSelectedSuperCategories] = useState<string[]>([]);
 
-  // 🔹 Obtener productos sin imágenes
+  const CACHE_EXPIRATION = 10 * 60 * 1000; // 10 minutos
+
+  // 🔹 Obtener productos desde `localStorage` o API
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:8001/products/');
+        const storedData = localStorage.getItem("products");
+        const storedTimestamp = localStorage.getItem("products_timestamp");
+
+        if (storedData && storedTimestamp && Date.now() - parseInt(storedTimestamp) < CACHE_EXPIRATION) {
+          console.log("✅ Usando productos de `localStorage`");
+          setProducts(JSON.parse(storedData));
+          setLoading(false);
+          return;
+        }
+
+        console.log("🔄 Fetching productos desde API...");
+        const response = await fetch('http://192.168.1.133:8001/products/');
         const data = await response.json();
         setProducts(data);
+
+        // Guardar en `localStorage`
+        localStorage.setItem("products", JSON.stringify(data));
+        localStorage.setItem("products_timestamp", Date.now().toString());
+
       } catch (err) {
         console.error("❌ Error al obtener productos:", err);
         setError(err instanceof Error ? err.message : "Error desconocido");
@@ -62,21 +59,42 @@ export const Home: React.FC = () => {
     fetchProducts();
   }, []);
 
-  // 🔹 Obtener imágenes por separado para cada producto
+  // 🔹 Función para convertir Blob a Base64
+  const blobToBase64 = (blob: Blob): Promise<string> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.readAsDataURL(blob);
+    });
+  };
+
+  // 🔹 Obtener imágenes solo si no están en `localStorage`
   useEffect(() => {
     const fetchImages = async () => {
       const images: { [key: string]: string } = {};
+
       await Promise.all(
         products.map(async (product) => {
-          try {
-            const response = await fetch(`http://localhost:8001/products/${product.id}/image`);
-            const blob = await response.blob();
-            images[product.id] = URL.createObjectURL(blob);
-          } catch (err) {
-            console.error(`⚠️ Error al obtener imagen del producto ${product.id}:`, err);
+          const storedImage = localStorage.getItem(`product_image_${product.id}`);
+
+          if (storedImage) {
+            images[product.id] = storedImage;
+          } else {
+            try {
+              const response = await fetch(`http://192.168.1.133:8001/products/${product.id}/image`);
+              const blob = await response.blob();
+              const base64Image = await blobToBase64(blob);
+              images[product.id] = base64Image;
+
+              // Guardar la imagen en `localStorage`
+              localStorage.setItem(`product_image_${product.id}`, base64Image);
+            } catch (err) {
+              console.error(`⚠️ Error al obtener imagen del producto ${product.id}:`, err);
+            }
           }
         })
       );
+
       setProductImages(images);
     };
 
@@ -85,39 +103,13 @@ export const Home: React.FC = () => {
     }
   }, [products]);
 
-  // 🔹 Filtrado de productos
+  // 🔹 Filtrado de productos con imágenes asignadas
   const filteredProducts = useMemo(() => {
     return products.map((product) => ({
       ...product,
-      image: productImages[product.id] || "", // Asigna la imagen descargada
-    })).filter((product) => {
-      const matchesCategory =
-        selectedCategories.length === 0 ||
-        product.category.some((cat) => selectedCategories.includes(cat));
-
-      const matchesSuperCategory =
-        selectedSuperCategories.length === 0 ||
-        selectedSuperCategories.includes(product.super_tipo);
-
-      return matchesCategory && matchesSuperCategory;
-    });
-  }, [products, productImages, selectedCategories, selectedSuperCategories]);
-
-  const handleCategorySelect = (categoryName: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(categoryName)
-        ? prev.filter((c) => c !== categoryName)
-        : [...prev, categoryName]
-    );
-  };
-
-  const handleSuperCategorySelect = (superCategoryName: string) => {
-    setSelectedSuperCategories((prev) =>
-      prev.includes(superCategoryName)
-        ? prev.filter((c) => c !== superCategoryName)
-        : [...prev, superCategoryName]
-    );
-  };
+      image: productImages[product.id] || "",
+    }));
+  }, [products, productImages]);
 
   if (loading) {
     return (
@@ -134,21 +126,6 @@ export const Home: React.FC = () => {
 
   return (
     <div className="home-container">
-      {/* Filtros de categorías */}
-      {/* <div className="filters-container">
-        <CategoryFilters
-          categories={categories}
-          selectedCategories={selectedCategories}
-          onCategorySelect={handleCategorySelect}
-        />
-        <SuperCategoryFilters
-          superCategories={superCategories}
-          selectedSuperCategories={selectedSuperCategories}
-          onSuperCategorySelect={handleSuperCategorySelect}
-        />
-      </div> */}
-
-      {/* Lista de productos */}
       <ProductsList products={filteredProducts} />
     </div>
   );

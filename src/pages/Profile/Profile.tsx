@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Profile.css'; // Importa el archivo CSS
 
@@ -9,7 +9,7 @@ export const Profile = ({ user, setUser }: { user: any; setUser: any }) => {
   const clearUser = () => {
     setUser(null); // Elimina el usuario del estado global
     localStorage.removeItem("user"); // Elimina el usuario del almacenamiento local
-    navigate('/login'); // Redirige al login después de cerrar sesión
+    navigate('/'); // Redirige al login después de cerrar sesión
   };
 
   useEffect(() => {
