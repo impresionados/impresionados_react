@@ -5,19 +5,64 @@ import { PaymentMethodSelect } from "../../components/Cart/PaymentMethodSelect";
 
 import "./Cart.css";
 
+const updateProductStock = async (productId: string, newStock: number) => {
+  try {
+    const response = await fetch(`http://192.168.1.133:8001/products/${productId}/stock?new_stock=${newStock}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`Error al actualizar el producto: ${errorMessage}`);
+    }
+
+    const data = await response.json();
+    console.log("✅ Producto actualizado en la API:", data);
+    return data;
+  } catch (error) {
+    console.error("❌ Error en la actualización del stock:", error);
+  }
+};
+
 const handlePurchase = async (
   items: { id: string; quantity: number; stock: number }[],
   clearCart: () => void,
   setShowPopup: (value: boolean) => void
 ) => {
   try {
-    console.log("Compra completada. Stock actualizado (simulado).");
+    console.log("🛒 Iniciando compra...");
 
+    // Obtener la caché actual de productos
+    const cachedProducts = localStorage.getItem("products");
+    let productList = cachedProducts ? JSON.parse(cachedProducts) : [];
+
+    for (const item of items) {
+      console.log(`🔄 Producto: ${item.id}, Cantidad comprada: ${item.quantity}, Stock actual: ${item.stock}`);
+
+      const newStock = Math.max(0, item.stock - item.quantity);
+
+      // Actualizar stock en `localStorage`
+      productList = productList.map((p: any) =>
+        p.id === item.id ? { ...p, stock: newStock } : p
+      );
+
+      // Actualizar stock en la API
+      await updateProductStock(item.id, newStock);
+    }
+
+    // Guardar la lista de productos actualizada en `localStorage`
+    localStorage.setItem("products", JSON.stringify(productList));
+    console.log("✅ Caché actualizada correctamente.");
+
+    console.log("🎉 Compra completada.");
     clearCart();
     setShowPopup(true);
     setTimeout(() => setShowPopup(false), 1500);
   } catch (error) {
-    console.error("Error en la compra:", error);
+    console.error("❌ Error en la compra:", error);
   }
 };
 
@@ -49,7 +94,7 @@ export const CartDisplay: React.FC = () => {
       {items.length > 0 ? (
         <div className="cart-items-list">
           {items.map((item) => {
-            // Intentar obtener el producto desde `localStorage`
+            // Obtener los productos desde `localStorage`
             const cachedProducts = localStorage.getItem("products");
             let productData = null;
 
