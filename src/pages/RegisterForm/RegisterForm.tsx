@@ -31,13 +31,13 @@ export const RegisterForm = () => {
     }
 
     try {
-      const checkResponse = await fetch(`http://192.168.1.133:8001/users/${encodeURIComponent(email)}`);
+      const checkResponse = await fetch(`http://10.102.10.15:8001/users/${encodeURIComponent(email)}`);
       if (checkResponse.ok) {
         setEmailError('Este email ya está en uso');
         return;
       }
 
-      const response = await fetch(`http://192.168.1.133:8001/users/?user_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&address=${encodeURIComponent(address)}&tlf=${encodeURIComponent(phone)}`, {
+      const response = await fetch(`http://10.102.10.15:8001/users/?user_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&address=${encodeURIComponent(address)}&tlf=${encodeURIComponent(phone)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
