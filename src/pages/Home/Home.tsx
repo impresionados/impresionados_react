@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ProductsList } from '../../components/ProductList/ProductList';
 import './Home.css';
+import { Footer } from '../../components/Footer/Footer'
+
 
 interface Product {
   id: string;
@@ -40,7 +42,7 @@ export const Home: React.FC = () => {
         }
 
         console.log("🔄 Fetching productos desde API...");
-        const response = await fetch('http://10.102.10.15:8001/products/');
+        const response = await fetch('http://192.168.1.133:8001/products/');
         const data = await response.json();
         setProducts(data);
 
@@ -81,7 +83,7 @@ export const Home: React.FC = () => {
             images[product.id] = storedImage;
           } else {
             try {
-              const response = await fetch(`http://10.102.10.15:8001/products/${product.id}/image`);
+              const response = await fetch(`http://192.168.1.133:8001/products/${product.id}/image`);
               const blob = await response.blob();
               const base64Image = await blobToBase64(blob);
               images[product.id] = base64Image;
@@ -127,6 +129,8 @@ export const Home: React.FC = () => {
   return (
     <div className="home-container">
       <ProductsList products={filteredProducts} />
+      <Footer/>
+
     </div>
   );
 };

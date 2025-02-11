@@ -1,0 +1,43 @@
+/* src/styles/Footer.css */
+.footer {
+  background-color: white;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  padding: 1rem 0;
+  text-align: center;
+  position: relative;
+  margin-top: 3%;
+  bottom: 0;
+  left: 0;
+}
+
+.footer-container {
+  max-width: 1200px;
+  padding: 0 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.footer-container p{
+  background: linear-gradient(
+    to right, 
+    #0D8C8C, /* Azul marino */
+    #04BF9D, /* Azul claro */
+    #DCBE0E, /* Amarillo */
+    #D97D0D  /* Naranja */
+  );
+  -webkit-background-clip: text; /* Usa el fondo solo dentro del texto */
+  -webkit-text-fill-color: transparent; /* Hace transparente el texto para mostrar el fondo */
+  font-weight: bold; /* Opcional: Hacer el texto más grueso para resaltar el degradado */
+}
+
+.faqp{
+  transition: color 0.3s ease; /* Suavidad para el cambio de color */
+}
+.faqp:hover{
+    color: #3182ce; /* Blue-600 al pasar el ratón */
+    cursor: pointer;
+}

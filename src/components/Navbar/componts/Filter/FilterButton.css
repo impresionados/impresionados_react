@@ -1,0 +1,16 @@
+.filters-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centrar horizontalmente */
+  font-size: 1.5rem; /* Tamaño consistente */
+  transition: color 0.3s ease; /* Suavidad para el cambio de color */
+}
+
+.filters-toggle:hover{
+  color: #3182ce; /* Blue-600 al pasar el ratón */
+  cursor: pointer;
+}

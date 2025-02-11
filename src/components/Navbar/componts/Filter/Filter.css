@@ -1,0 +1,17 @@
+.filters-container {
+  position: fixed; /* Mantiene el contenedor en la pantalla */
+  top: 8%; /* A 7% del borde superior */
+  left: 50%;
+  transform: translate(-50%, 0); /* Centrado horizontalmente */
+  width: 90%; /* Ocupar gran parte de la pantalla */
+  max-width: 1200px; /* Límite de ancho */
+  background: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  z-index: 1000;
+  border-radius: 12px;
+  overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra los elementos dentro del contenedor */
+}

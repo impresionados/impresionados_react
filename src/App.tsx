@@ -7,6 +7,8 @@ import { Profile } from './pages/Profile/Profile';
 import { Navbar } from './components/Navbar/Navbar';
 import { Home } from './pages/Home/Home';
 import { CartDisplay } from './pages/Cart/Cart';
+import FAQPage from './pages/FAQP/FAQPage';
+
 
 const App: React.FC = () => {
   const [user, setUser] = useState<any>(() => {
@@ -36,6 +38,7 @@ const App: React.FC = () => {
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
             <Route path="/cart" element={<CartDisplay />} />
+            <Route path="/faqp" element={<FAQPage />} />
           </Routes>
         </div>
       </div>

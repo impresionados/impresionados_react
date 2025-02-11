@@ -1,0 +1,68 @@
+.filters-grid {
+  display: flex;
+  justify-content: center; /* Centra los supertypos */
+  flex-wrap: wrap;
+  gap: 40px;
+  width: 100%;
+}
+
+.filter-category {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.filter-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  color: #444;
+}
+
+.filter-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.filter-item {
+  margin-bottom: 5px;
+}
+
+.filter-option {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.filter-option input {
+  margin-right: 8px;
+}
+
+/* 📌 RESPONSIVE: Se ajusta según el tamaño de pantalla */
+@media (max-width: 1400px) {
+  .filters-grid {
+      gap: 30px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .filters-grid {
+      gap: 25px;
+  }
+}
+
+@media (max-width: 900px) {
+  .filters-grid {
+      gap: 20px;
+      flex-direction: column; /* En pantallas pequeñas, poner los filtros en columna */
+  }
+}
+
+@media (max-width: 600px) {
+  .filters-grid {
+      gap: 15px;
+      flex-direction: column;
+  }
+}
