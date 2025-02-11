@@ -15,7 +15,7 @@ const App: React.FC = () => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
-
+  const [searchQuery, setSearchQuery] = useState<string>(""); // Asegura que sea una cadena vacía por defecto
   useEffect(() => {
     const handleStorageChange = () => {
       const storedUser = localStorage.getItem("user");
@@ -29,10 +29,9 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="min-h-screen bg-gray-50">
-        <Navbar user={user} /> {/* ✅ Ahora no dará error */}
-        <div className="pt-16 px-4 max-w-7xl mx-auto">
+      <Navbar user={user} searchQuery={searchQuery} setSearchQuery={setSearchQuery} /> {/* ✅ Pasamos searchQuery */}        <div className="pt-16 px-4 max-w-7xl mx-auto">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home searchQuery={searchQuery || ""} />} />
             <Route path="/product/:productId" element={<ProductDetail />} />
             <Route path="/login" element={<LoginForm setUser={setUser} />} />
             <Route path="/register" element={<RegisterForm />} />
