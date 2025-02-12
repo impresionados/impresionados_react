@@ -1,59 +1,50 @@
 import { create } from 'zustand';
-import { CartItem, Product } from '../types';
 
-export interface CartStore {
-  items: CartItem[];
-  addItem: (product: Product) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
-  clearCart: () => void;
-  total: number;
+// Definimos la estructura de un producto en el carrito
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
 }
 
-export const useCartStore = create<CartStore>((set) => ({
-  items: [],
-  total: 0,
-  addItem: (product) =>
+// Definimos el estado y las acciones del carrito
+interface CartState {
+  items: CartItem[]; // Lista de productos en el carrito
+  addItem: (item: CartItem) => void; // Función para añadir un producto
+  removeItem: (id: string) => void; // Función para eliminar un producto
+  clearCart: () => void; // Función para vaciar el carrito
+}
+
+// Creamos el estado global del carrito con Zustand
+export const useCartStore = create<CartState>((set) => ({
+  items: [], // Inicialmente el carrito está vacío
+
+  // Función para añadir un producto al carrito
+  addItem: (item) =>
     set((state) => {
-      const existingItem = state.items.find((item) => item.id === product.id);
+      const existingItem = state.items.find((i) => i.id === item.id);
+
       if (existingItem) {
+        // Si el producto ya está en el carrito, aumentamos su cantidad
         return {
-          items: state.items.map((item) =>
-            item.id === product.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
+          items: state.items.map((i) =>
+            i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
           ),
-          total: state.total + product.price,
-          
         };
       }
-      return {
-        items: [...state.items, { ...product, quantity: 1 }],
-        total: state.total + product.price,
-      };
+
+      // Si el producto no está en el carrito, lo añadimos con cantidad 1
+      return { items: [...state.items, { ...item, quantity: 1 }] };
     }),
-    removeItem: (productId) =>
-      set((state) => {
-    
-          // Filtra los ítems, eliminando todas las ocurrencias del productId
-          const itemsFiltrados = state.items.filter((item) => item.id !== productId);
-    
-          // Calcular la cantidad total eliminada correctamente
-          const totalEliminado = state.items
-              .filter((item) => item.id === productId)
-              .reduce((acc, item) => acc + (item.price * item.quantity), 0);
-        
-          return {
-              items: itemsFiltrados,
-              total: Math.max(0, state.total - totalEliminado), // Asegurar que el total no sea negativo
-          };
-      }),
-  updateQuantity: (productId, quantity) =>
+
+  // Función para eliminar un producto del carrito
+  removeItem: (id) =>
     set((state) => ({
-      items: state.items.map((item) =>
-        item.id === productId ? { ...item, quantity } : item
-      ),
-      total: state.items.reduce((acc, item) => acc + item.price * (item.id === productId ? quantity : item.quantity), 0),
+      items: state.items.filter((item) => item.id !== id), // Filtramos y removemos el producto
     })),
-  clearCart: () => set({ items: [], total: 0 }),
+
+  // Función para vaciar el carrito
+  clearCart: () => set({ items: [] }),
 }));
+

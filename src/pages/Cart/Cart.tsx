@@ -4,6 +4,7 @@ import { CartItem } from "../../components/Cart/CartItem";
 import { PaymentMethodSelect } from "../../components/Cart/PaymentMethodSelect";
 import "./Cart.css";
 
+// Función para actualizar el stock de un producto en la API
 const updateProductStock = async (productId: string, newStock: number) => {
   try {
     const response = await fetch(`http://192.168.68.127:8001/products/${productId}/stock?new_stock=${newStock}`, {
@@ -26,6 +27,7 @@ const updateProductStock = async (productId: string, newStock: number) => {
   }
 };
 
+// Función para procesar la compra y actualizar el stock
 const handlePurchase = async (
   items: { id: string; quantity: number; stock: number }[],
   clearCart: () => void,
@@ -34,7 +36,7 @@ const handlePurchase = async (
   try {
     console.log("🛒 Iniciando compra...");
 
-    // Obtener la caché actual de productos
+    // Obtener productos desde el caché
     const cachedProducts = localStorage.getItem("products");
     let productList = cachedProducts ? JSON.parse(cachedProducts) : [];
 
@@ -65,6 +67,7 @@ const handlePurchase = async (
   }
 };
 
+// Componente del carrito de compras
 export const CartDisplay: React.FC = () => {
   const { items, total, clearCart } = useCartStore();
   const [showPopup, setShowPopup] = useState(false);
@@ -76,7 +79,7 @@ export const CartDisplay: React.FC = () => {
 
       items.forEach((item) => {
         const cachedImage = localStorage.getItem(`product_image_${item.id}`);
-        images[item.id] = cachedImage || "../img/proximamente.png"; // Usa imagen en caché o una por defecto
+        images[item.id] = cachedImage || "../img/proximamente.png";
       });
 
       setProductImages(images);
@@ -85,76 +88,28 @@ export const CartDisplay: React.FC = () => {
     if (items.length > 0) {
       loadImagesFromCache();
     }
-  }, [items]); // Se ejecuta cuando cambian los productos en el carrito
+  }, [items]);
 
   return (
     <div className="cart-container">
       <h1 className="cart-title">Tu Carrito</h1>
       {items.length > 0 ? (
         <div className="cart-items-list">
-          {items.map((item) => {
-            // Obtener los productos desde `localStorage`
-            const cachedProducts = localStorage.getItem("products");
-            let productData = null;
-
-            if (cachedProducts) {
-              const allProducts = JSON.parse(cachedProducts);
-              productData = allProducts.find((p: any) => p.id === item.id);
-            }
-
-            // Asignar valores por defecto si no está en caché
-            const product = productData || {
-              id: item.id,
-              name: "Producto desconocido",
-              price: 0,
-              stock: 0,
-              category: [],
-              super_tipo: "Desconocido",
-            };
-
-            return (
-              <div key={item.id} className="cart-item-container">
-                <CartItem
-                  id={product.id}
-                  name={product.name}
-                  image={productImages[item.id]}
-                  price={product.price}
-                  quantity={item.quantity}
-                />
-              </div>
-            );
-          })}
+          {items.map((item) => (
+            <CartItem key={item.id} {...item} image={productImages[item.id]} />
+          ))}
           <div className="final">
             <PaymentMethodSelect />
             <div className="cart-total">
-              Total: ${total.toFixed(2)}
+              Total: €{total.toFixed(2)} {/* Cambio de $ a € */}
             </div>
-            <div className="buy">
-              <button
-                onClick={() =>
-                  handlePurchase(
-                    items.map(({ id, quantity, stock }) => ({ id, quantity, stock })),
-                    clearCart,
-                    setShowPopup
-                  )
-                }
-                className="checkout-button"
-              >
-                Comprar
-              </button>
-            </div>
+            <button onClick={() => handlePurchase(items, clearCart, setShowPopup)} className="checkout-button">
+              Comprar
+            </button>
           </div>
         </div>
       ) : (
         <p className="empty-cart-message">El carrito está vacío</p>
-      )}
-
-      {showPopup && (
-        <div className="popup-overlay">
-          <div className="popup">
-            <p>Compra realizada correctamente</p>
-          </div>
-        </div>
       )}
     </div>
   );

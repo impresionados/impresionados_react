@@ -1,13 +1,14 @@
-// src/components/Cart/Components/QuantityControls.tsx
 import React from "react";
 import { useCartStore } from "../../store/cartStore";
 import './QuantityControls.css';
 
+// Interfaz para definir las propiedades del control de cantidad
 interface QuantityControlsProps {
   id: string;
   quantity: number;
 }
 
+// Componente para incrementar o disminuir la cantidad de un producto en el carrito
 export const QuantityControls: React.FC<QuantityControlsProps> = ({ id, quantity }) => {
   const { updateQuantity } = useCartStore();
 
@@ -23,19 +24,9 @@ export const QuantityControls: React.FC<QuantityControlsProps> = ({ id, quantity
 
   return (
     <div className="quantity-controls">
-      <button
-        onClick={handleDecrease}
-        className="quantity-button"
-      >
-        -
-      </button>
+      <button onClick={handleDecrease} className="quantity-button">-</button>
       <span className="quantity-display">{quantity}</span>
-      <button
-        onClick={handleIncrease}
-        className="quantity-button"
-      >
-        +
-      </button>
+      <button onClick={handleIncrease} className="quantity-button">+</button>
     </div>
   );
 };
