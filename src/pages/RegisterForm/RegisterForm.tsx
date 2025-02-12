@@ -116,17 +116,63 @@ export const RegisterForm = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
 
-          {/* Métodos de pago */}
+<Input
+            id="address"
+            name="address"
+            type="text"
+            label="Dirección"
+            icon={HomeIcon}
+            required
+            placeholder="Inserta tu dirección"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+
+          <Input
+            id="phone"
+            name="phone"
+            type="text"
+            label="Teléfono"
+            icon={Phone}
+            required
+            placeholder="Inserta tu número de teléfono"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+
+          {/* 🔹 Selección de método de pago */}
           <div className={styles.paymentContainer}>
             <label className={styles.paymentLabel}>Método de pago:</label>
-            <select
-              value={paymentMethod}
-              onChange={(e) => setPaymentMethod(e.target.value)}
-            >
-              <option value="tarjeta">Tarjeta de crédito/débito</option>
-              <option value="paypal">PayPal</option>
-            </select>
-          </div>
+            <div className={styles.paymentOptions}>
+              <label className={styles.radioOption}>
+              Tarjeta de crédito/débito 
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="tarjeta"
+                  checked={paymentMethod === 'tarjeta'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <CreditCard size={16} />
+              </label>
+              <label className={styles.radioOption}>
+              PayPal 
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="paypal"
+                  checked={paymentMethod === 'paypal'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <DollarSign size={16} /> 
+              </label>
+
+              
+            </div>
+            </div>
+
+          {/* Métodos de pago */}
+          
 
           {error && <p className={styles.error}>{error}</p>}
 

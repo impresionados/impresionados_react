@@ -61,7 +61,7 @@ const handlePurchase = async (
     console.log("🎉 Compra completada.");
     clearCart();
     setShowPopup(true);
-    setTimeout(() => setShowPopup(false), 1500);
+    setTimeout(() => setShowPopup(false), 3000); // ⏳ Aumentado a 3 segundos
   } catch (error) {
     console.error("❌ Error en la compra:", error);
   }
@@ -69,7 +69,7 @@ const handlePurchase = async (
 
 // Componente del carrito de compras
 export const CartDisplay: React.FC = () => {
-  const { items, total, clearCart } = useCartStore();
+  const { items = [], total = 0, clearCart } = useCartStore();
   const [showPopup, setShowPopup] = useState(false);
   const [productImages, setProductImages] = useState<{ [key: string]: string }>({});
 
@@ -110,6 +110,15 @@ export const CartDisplay: React.FC = () => {
         </div>
       ) : (
         <p className="empty-cart-message">El carrito está vacío</p>
+      )}
+
+      {/* Popup de compra realizada */}
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup">
+            <p>✅ Compra realizada correctamente</p>
+          </div>
+        </div>
       )}
     </div>
   );
