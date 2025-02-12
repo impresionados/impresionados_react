@@ -3,6 +3,7 @@ import { ProductsList } from "../../components/ProductList/ProductList";
 import { Footer } from "../../components/Footer/Footer";
 import "./Home.css";
 
+// Definimos la estructura de un producto
 interface Product {
   id: string;
   name: string;
@@ -18,25 +19,33 @@ interface Product {
   }>;
 }
 
+// Propiedades del componente `Home`
 interface HomeProps {
-  searchQuery: string;
+  searchQuery: string; // Término de búsqueda ingresado por el usuario
 }
 
 export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
+  // Estado para almacenar la lista de productos
   const [products, setProducts] = useState<Product[]>([]);
+  // Estado para almacenar imágenes de productos
   const [productImages, setProductImages] = useState<{ [key: string]: string }>({});
+  // Estado de carga
   const [loading, setLoading] = useState(true);
+  // Estado de error
   const [error, setError] = useState<string | null>(null);
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery); // Nuevo estado con delay
+  // Estado para manejar la búsqueda con un pequeño retraso
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
 
-  const CACHE_EXPIRATION = 10 * 60 * 1000; // 10 minutos
+  const CACHE_EXPIRATION = 10 * 60 * 1000; // Cache por 10 minutos
 
+  // Efecto para obtener la lista de productos desde la API o localStorage
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
         setError(null);
 
+        // Intentamos obtener datos desde `localStorage`
         const storedData = localStorage.getItem("products");
         const storedTimestamp = localStorage.getItem("products_timestamp");
 
@@ -50,6 +59,7 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
             throw new Error("Datos en localStorage no son válidos");
           }
         } else {
+          // Si no hay datos válidos en cache, hacemos una petición a la API
           console.log("🔄 Fetching productos desde API...");
           const response = await fetch("http://192.168.68.127:8001/products/");
           if (!response.ok) throw new Error("Error al obtener los productos de la API");
@@ -57,6 +67,7 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
           const data = await response.json();
           if (Array.isArray(data)) {
             setProducts(data);
+            // Guardamos los datos en `localStorage`
             localStorage.setItem("products", JSON.stringify(data));
             localStorage.setItem("products_timestamp", Date.now().toString());
           } else {
@@ -74,16 +85,16 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
     fetchProducts();
   }, []);
 
-  // 🔹 Delay de 1 segundo antes de actualizar `debouncedSearchQuery`
+  // Efecto para manejar el retraso en la actualización de la búsqueda (500ms)
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchQuery(searchQuery);
-    }, 500); // ⏳ Espera 1 segundo antes de actualizar
+    }, 500);
 
-    return () => clearTimeout(handler); // 🔄 Limpia el timeout si el usuario sigue escribiendo
+    return () => clearTimeout(handler);
   }, [searchQuery]);
 
-  // 🔹 Función para convertir Blob a Base64
+  // Función para convertir un Blob en Base64 (para almacenar imágenes en cache)
   const blobToBase64 = (blob: Blob): Promise<string> => {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -92,7 +103,7 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
     });
   };
 
-  // 🔹 Obtener imágenes solo si no están en `localStorage`
+  // Efecto para cargar imágenes de productos
   useEffect(() => {
     const fetchImages = async () => {
       const images: { [key: string]: string } = {};
@@ -105,13 +116,14 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
             images[product.id] = storedImage;
           } else {
             try {
+              // Fetch de la imagen del producto desde la API
               const response = await fetch(`http://192.168.68.127:8001/products/${product.id}/image`);
               if (!response.ok) throw new Error(`No se pudo cargar la imagen para ${product.id}`);
               const blob = await response.blob();
               const base64Image = await blobToBase64(blob);
               images[product.id] = base64Image;
 
-              // Guardar la imagen en `localStorage`
+              // Guardamos la imagen en `localStorage`
               localStorage.setItem(`product_image_${product.id}`, base64Image);
             } catch (err) {
               console.error(`⚠️ Error al obtener imagen del producto ${product.id}:`, err);
@@ -128,7 +140,7 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
     }
   }, [products]);
 
-  // 🔹 Aplicar filtrado con `debouncedSearchQuery`
+  // Filtrado de productos según la búsqueda del usuario
   const filteredProducts = useMemo(() => {
     const filtered = products.filter((product) =>
       product.name?.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
@@ -136,11 +148,11 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
 
     return filtered.map((product) => ({
       ...product,
-      image: productImages[product.id] || "",
+      image: productImages[product.id] || "", // Asigna la imagen correspondiente
     }));
   }, [products, productImages, debouncedSearchQuery]);
 
-  // 🔹 Manejo de errores y carga
+  // Muestra un mensaje de carga si los productos aún no están disponibles
   if (loading) {
     return (
       <div className="loading-container">
@@ -152,13 +164,16 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
     );
   }
 
+  // Muestra un mensaje de error si hubo un problema al cargar los productos
   if (error) {
     return <p className="error-message">❌ Error: {error}</p>;
   }
 
   return (
     <div className="home-container">
+      {/* Renderiza la lista de productos filtrados */}
       <ProductsList products={filteredProducts} />
+      {/* Renderiza el footer de la página */}
       <Footer />
     </div>
   );

@@ -1,13 +1,15 @@
 import React from 'react';
 import './ActionButton.css';
 
+// Definimos las propiedades del botón de acción
 interface ActionButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   className?: string;
-  children: React.ReactNode;
+  children: React.ReactNode; // Contenido del botón
 }
 
+// Componente de botón reutilizable
 export const ActionButton: React.FC<ActionButtonProps> = ({
   onClick,
   className = '',
@@ -18,7 +20,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
       onClick={onClick}
       className={`action-button ${className}`}
     >
-      {children}
+      {children} {/* Renderiza el contenido del botón */}
     </button>
   );
 };

@@ -1,14 +1,14 @@
 import React from 'react';
-import { ShoppingCart, Trash, Eye } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ShoppingCart } from 'lucide-react';
 import { ActionButton } from '../ActionButton/ActionButton';
 import './ProductActions.css';
 
+// Propiedades del componente de acciones del producto
 interface ProductActionsProps {
-  context: 'store' | 'cart'; // Contexto: "store" para tienda, "cart" para carrito
+  context: 'store' | 'cart'; // Contexto: tienda o carrito
   onAction?: () => void; // Acción personalizada
   productId: string; // ID del producto
-  stock: number; // Cantidad de stock del producto
+  stock: number; // Stock disponible
 }
 
 export const ProductActions: React.FC<ProductActionsProps> = ({
@@ -19,15 +19,10 @@ export const ProductActions: React.FC<ProductActionsProps> = ({
 }) => {
   return (
     <div className="product-actions">
-      <>
-        <ActionButton
-          onClick={onAction}
-          className="add-to-cart"
-        >
-          <ShoppingCart className="icon" />
-        </ActionButton>
-      </>
-      
+      {/* Botón para agregar el producto al carrito */}
+      <ActionButton onClick={onAction} className="add-to-cart">
+        <ShoppingCart className="icon" />
+      </ActionButton>
     </div>
   );
 };
