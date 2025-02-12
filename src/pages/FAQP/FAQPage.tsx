@@ -1,11 +1,14 @@
+// Importación de componentes y hojas de estilo
 import FAQItem from "../../components/FAQP/FAQItem";
 import "./FAQPage.css";
 
+// Definición de la interfaz FAQ que especifica la estructura de un objeto de pregunta frecuente
 interface FAQ {
   question: string;
   answer: string;
 }
 
+// Creación de un array de objetos FAQ con preguntas y respuestas predefinidas
 const faqs: FAQ[] = [
   {
     question: "¿Cómo recupero la contraseña si me he olvidado?",
@@ -21,10 +24,14 @@ const faqs: FAQ[] = [
   },
 ];
 
+// Definición del componente FAQPage que renderiza la página de Preguntas Frecuentes
 export default function FAQPage() {
   return (
     <div className="faq-container">
+      {/* Título de la página */}
       <h1 className="faq-title">Preguntas Frecuentes</h1>
+
+      {/* Lista de preguntas frecuentes generada dinámicamente a partir del array faqs */}
       <div className="faq-list">
         {faqs.map((faq, index) => (
           <FAQItem key={index} faq={faq} />

@@ -4,6 +4,10 @@ import { CartItem } from "../../components/Cart/CartItem";
 import { PaymentMethodSelect } from "../../components/Cart/PaymentMethodSelect";
 import "./Cart.css";
 
+/**
+ * Función para actualizar el stock de un producto en la API.
+ * Realiza una solicitud `PUT` a un servidor remoto para modificar el stock de un producto específico.
+ */
 const updateProductStock = async (productId: string, newStock: number) => {
   try {
     const response = await fetch(`http://192.168.68.127:8001/products/${productId}/stock?new_stock=${newStock}`, {
@@ -26,6 +30,12 @@ const updateProductStock = async (productId: string, newStock: number) => {
   }
 };
 
+/**
+ * Función para manejar la compra de los productos en el carrito.
+ * - Reduce el stock de cada producto tanto en `localStorage` como en la API.
+ * - Limpia el carrito después de una compra exitosa.
+ * - Muestra un mensaje emergente de confirmación.
+ */
 const handlePurchase = async (
   items: { id: string; quantity: number; stock: number }[],
   clearCart: () => void,
@@ -65,11 +75,22 @@ const handlePurchase = async (
   }
 };
 
+/**
+ * Componente principal que muestra el carrito de compras.
+ * - Obtiene los productos del estado global `useCartStore()`.
+ * - Recupera imágenes de los productos desde `localStorage`.
+ * - Renderiza los productos del carrito junto con el precio total.
+ * - Permite realizar una compra y actualizar el stock en la API.
+ */
 export const CartDisplay: React.FC = () => {
   const { items, total, clearCart } = useCartStore();
   const [showPopup, setShowPopup] = useState(false);
   const [productImages, setProductImages] = useState<{ [key: string]: string }>({});
 
+  /**
+   * Efecto secundario para cargar imágenes de productos almacenadas en caché.
+   * Si la imagen no se encuentra en `localStorage`, se usa una imagen por defecto.
+   */
   useEffect(() => {
     const loadImagesFromCache = () => {
       const images: { [key: string]: string } = {};
@@ -102,7 +123,7 @@ export const CartDisplay: React.FC = () => {
               productData = allProducts.find((p: any) => p.id === item.id);
             }
 
-            // Asignar valores por defecto si no está en caché
+            // Asignar valores por defecto si el producto no está en caché
             const product = productData || {
               id: item.id,
               name: "Producto desconocido",
@@ -149,6 +170,7 @@ export const CartDisplay: React.FC = () => {
         <p className="empty-cart-message">El carrito está vacío</p>
       )}
 
+      {/* Popup de confirmación de compra */}
       {showPopup && (
         <div className="popup-overlay">
           <div className="popup">

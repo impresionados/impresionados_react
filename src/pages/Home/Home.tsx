@@ -3,7 +3,12 @@ import { ProductsList } from "../../components/ProductList/ProductList";
 import { Footer } from "../../components/Footer/Footer";
 import "./Home.css";
 
-// Definimos la estructura de un producto
+/*
+📌 Definición de Tipos e Interfaces
+- Se define la estructura de un `Product` con todas sus propiedades.
+- Se establece la interfaz `HomeProps`, que recibe `searchQuery` como prop.
+*/
+
 interface Product {
   id: string;
   name: string;
@@ -19,33 +24,38 @@ interface Product {
   }>;
 }
 
-// Propiedades del componente `Home`
 interface HomeProps {
-  searchQuery: string; // Término de búsqueda ingresado por el usuario
+  searchQuery: string;
 }
 
+/*
+📌 Componente `Home`
+- Define los estados para almacenar productos, imágenes, estado de carga y errores.
+- También implementa un `debouncedSearchQuery` para evitar búsquedas innecesarias en tiempo real.
+*/
+
 export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
-  // Estado para almacenar la lista de productos
   const [products, setProducts] = useState<Product[]>([]);
-  // Estado para almacenar imágenes de productos
   const [productImages, setProductImages] = useState<{ [key: string]: string }>({});
-  // Estado de carga
   const [loading, setLoading] = useState(true);
-  // Estado de error
   const [error, setError] = useState<string | null>(null);
-  // Estado para manejar la búsqueda con un pequeño retraso
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
 
-  const CACHE_EXPIRATION = 10 * 60 * 1000; // Cache por 10 minutos
+  const CACHE_EXPIRATION = 10 * 60 * 1000; // ⏳ Definimos el tiempo de expiración del caché en 10 minutos.
 
-  // Efecto para obtener la lista de productos desde la API o localStorage
+  /*
+  📌 `useEffect` para Obtener Productos
+  - Intenta recuperar los productos desde `localStorage` para evitar llamadas innecesarias a la API.
+  - Si los datos en caché no existen o están vencidos, hace una solicitud a la API.
+  - Maneja errores y establece el estado de carga y productos correctamente.
+  */
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        // Intentamos obtener datos desde `localStorage`
         const storedData = localStorage.getItem("products");
         const storedTimestamp = localStorage.getItem("products_timestamp");
 
@@ -59,15 +69,13 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
             throw new Error("Datos en localStorage no son válidos");
           }
         } else {
-          // Si no hay datos válidos en cache, hacemos una petición a la API
           console.log("🔄 Fetching productos desde API...");
-          const response = await fetch("http://192.168.68.127:8001/products/");
+          const response = await fetch("http://192.168.1.133:8001/products/");
           if (!response.ok) throw new Error("Error al obtener los productos de la API");
 
           const data = await response.json();
           if (Array.isArray(data)) {
             setProducts(data);
-            // Guardamos los datos en `localStorage`
             localStorage.setItem("products", JSON.stringify(data));
             localStorage.setItem("products_timestamp", Date.now().toString());
           } else {
@@ -85,7 +93,12 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
     fetchProducts();
   }, []);
 
-  // Efecto para manejar el retraso en la actualización de la búsqueda (500ms)
+  /*
+  📌 `useEffect` para Aplicar un Delay a la Búsqueda
+  - Implementa un debounce de 500ms para evitar filtrar productos en cada pulsación del usuario.
+  - Si el usuario sigue escribiendo antes de que se complete el tiempo, reinicia el temporizador.
+  */
+
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchQuery(searchQuery);
@@ -94,7 +107,11 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
     return () => clearTimeout(handler);
   }, [searchQuery]);
 
-  // Función para convertir un Blob en Base64 (para almacenar imágenes en cache)
+  /*
+  📌 Función `blobToBase64`
+  - Convierte un `Blob` en una cadena Base64, necesaria para almacenar imágenes en `localStorage`.
+  */
+
   const blobToBase64 = (blob: Blob): Promise<string> => {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -103,7 +120,12 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
     });
   };
 
-  // Efecto para cargar imágenes de productos
+  /*
+  📌 `useEffect` para Cargar Imágenes de los Productos
+  - Verifica si la imagen del producto ya está en `localStorage` y la reutiliza.
+  - Si no está almacenada, la obtiene desde la API, la convierte a Base64 y la almacena en `localStorage`.
+  */
+
   useEffect(() => {
     const fetchImages = async () => {
       const images: { [key: string]: string } = {};
@@ -116,14 +138,12 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
             images[product.id] = storedImage;
           } else {
             try {
-              // Fetch de la imagen del producto desde la API
-              const response = await fetch(`http://192.168.68.127:8001/products/${product.id}/image`);
+              const response = await fetch(`http://192.168.1.133:8001/products/${product.id}/image`);
               if (!response.ok) throw new Error(`No se pudo cargar la imagen para ${product.id}`);
               const blob = await response.blob();
               const base64Image = await blobToBase64(blob);
               images[product.id] = base64Image;
 
-              // Guardamos la imagen en `localStorage`
               localStorage.setItem(`product_image_${product.id}`, base64Image);
             } catch (err) {
               console.error(`⚠️ Error al obtener imagen del producto ${product.id}:`, err);
@@ -140,7 +160,12 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
     }
   }, [products]);
 
-  // Filtrado de productos según la búsqueda del usuario
+  /*
+  📌 Filtrado de Productos con `useMemo`
+  - Filtra los productos en base al término de búsqueda (`debouncedSearchQuery`).
+  - Agrega la imagen correspondiente a cada producto, obtenida previamente.
+  */
+
   const filteredProducts = useMemo(() => {
     const filtered = products.filter((product) =>
       product.name?.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
@@ -148,11 +173,16 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
 
     return filtered.map((product) => ({
       ...product,
-      image: productImages[product.id] || "", // Asigna la imagen correspondiente
+      image: productImages[product.id] || "",
     }));
   }, [products, productImages, debouncedSearchQuery]);
 
-  // Muestra un mensaje de carga si los productos aún no están disponibles
+  /*
+  📌 Manejo de Carga y Errores
+  - Si la aplicación está cargando, muestra un spinner de carga.
+  - Si hay un error, se muestra un mensaje de error en la UI.
+  */
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -164,16 +194,18 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
     );
   }
 
-  // Muestra un mensaje de error si hubo un problema al cargar los productos
   if (error) {
     return <p className="error-message">❌ Error: {error}</p>;
   }
 
+  /*
+  📌 Renderización Final
+  - Se muestra la lista de productos filtrados y el footer.
+  */
+
   return (
     <div className="home-container">
-      {/* Renderiza la lista de productos filtrados */}
       <ProductsList products={filteredProducts} />
-      {/* Renderiza el footer de la página */}
       <Footer />
     </div>
   );

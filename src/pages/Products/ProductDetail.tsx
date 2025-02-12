@@ -3,6 +3,11 @@ import { useParams } from 'react-router-dom';
 import './ProductDetail.css';
 import { useCartStore } from '../../store/cartStore';
 
+/**
+ * Definición de la interfaz `Product`, que establece la estructura de un producto.
+ * Incluye detalles como id, nombre, descripción, precio, stock, categorías, imagen,
+ * tipo y una lista de calificaciones de usuarios.
+ */
 interface Product {
   id: string;
   name: string;
@@ -19,13 +24,25 @@ interface Product {
   }>;
 }
 
+/**
+ * Componente `ProductDetail` que muestra la información detallada de un producto.
+ */
 export const ProductDetail: React.FC = () => {
+  // Obtiene el `productId` desde la URL usando `useParams`.
   const { productId } = useParams<{ productId: string }>();
+
+  // Estados para almacenar el producto, la imagen, y el estado de carga.
   const [product, setProduct] = useState<Product | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Obtiene la función `addItem` del store de carrito para agregar productos.
   const addItem = useCartStore((state) => state.addItem);
 
+  /**
+   * `useEffect` que carga los datos del producto y su imagen desde el almacenamiento local.
+   * Si el producto no está en caché, se establece un producto con valores por defecto.
+   */
   useEffect(() => {
     const loadProductFromCache = () => {
       const cachedProducts = localStorage.getItem("products");
@@ -71,6 +88,7 @@ export const ProductDetail: React.FC = () => {
     loadImageFromCache();
   }, [productId]);
 
+  // Muestra un spinner de carga mientras los datos se están obteniendo.
   if (loading) {
     return (
       <div className="loading-container">
@@ -82,10 +100,15 @@ export const ProductDetail: React.FC = () => {
     );
   }
 
+  // Muestra un mensaje de error si el producto no se encontró.
   if (!product) {
     return <p className="loading">❌ Error: No se encontró el producto en caché.</p>;
   }
 
+  /**
+   * Renderiza los detalles del producto incluyendo su imagen, información de precio,
+   * stock, categorías y un botón para añadir al carrito.
+   */
   return (
     <div className="product-detail">
       <h1 className="product-title">{product.name}</h1>

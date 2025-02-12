@@ -1,3 +1,5 @@
+// Importación de dependencias y componentes necesarios
+// Se importan React y useState para manejar el estado del formulario. También se importan iconos de Lucide y componentes personalizados para inputs, botones y enlaces.
 import React, { useState } from 'react';
 import { User, Mail, Lock, Phone, HomeIcon, CreditCard, DollarSign } from 'lucide-react';
 import Input from '../../components/Login-register/components/Input/Input';
@@ -6,8 +8,9 @@ import Link from '../../components/Login-register/components/Link/Link';
 import styles from './RegisterForm.module.css';
 import { useNavigate } from 'react-router-dom';
 
-
+// Componente funcional RegisterForm
 export const RegisterForm = () => {
+  // Definición de estados para almacenar los valores del formulario y manejar errores
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,26 +21,29 @@ export const RegisterForm = () => {
   const [error, setError] = useState('');
   const [emailError, setEmailError] = useState('');
   const navigate = useNavigate();
-  
 
+  // Función para manejar el registro de usuarios
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setEmailError('');
 
+    // Validación de coincidencia de contraseñas
     if (password !== confirmPassword) {
       setError('Las contraseñas no coinciden');
       return;
     }
 
     try {
-      const checkResponse = await fetch(`http://192.168.68.127:8001/users/${encodeURIComponent(email)}`);
+      // Verificación de si el email ya está en uso
+      const checkResponse = await fetch(`http://192.168.1.133:8001/users/${encodeURIComponent(email)}`);
       if (checkResponse.ok) {
         setEmailError('Este email ya está en uso');
         return;
       }
 
-      const response = await fetch(`http://192.168.68.127:8001/users/?user_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&address=${encodeURIComponent(address)}&tlf=${encodeURIComponent(phone)}`, {
+      // Registro del usuario en la base de datos
+      const response = await fetch(`http://192.168.1.133:8001/users/?user_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&address=${encodeURIComponent(address)}&tlf=${encodeURIComponent(phone)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -47,18 +53,20 @@ export const RegisterForm = () => {
       }
 
       alert('Registro exitoso');
-      navigate('/login');
+      navigate('/login'); // Redirige al usuario a la página de inicio de sesión
 
     } catch (err: any) {
       setError(err.message);
     }
   };
 
+  // Renderización del formulario de registro
   return (
     <div className={styles.container}>
       <div className={styles.formContainer}>
         <h2 className={styles.title}>Crea una cuenta</h2>
         <form className={styles.form} onSubmit={handleRegister}>
+          {/* Campo para el nombre completo */}
           <Input
             id="name"
             name="name"
@@ -71,6 +79,7 @@ export const RegisterForm = () => {
             onChange={(e) => setName(e.target.value)}
           />
 
+          {/* Campo para el correo electrónico */}
           <Input
             id="email"
             name="email"
@@ -84,6 +93,7 @@ export const RegisterForm = () => {
           />
           {emailError && <p className={styles.error}>{emailError}</p>}
 
+          {/* Campo para la contraseña */}
           <Input
             id="password"
             name="password"
@@ -96,6 +106,7 @@ export const RegisterForm = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
 
+          {/* Campo para confirmar la contraseña */}
           <Input
             id="confirm-password"
             name="confirm-password"
@@ -108,6 +119,7 @@ export const RegisterForm = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
 
+          {/* Campo para la dirección */}
           <Input
             id="address"
             name="address"
@@ -120,6 +132,7 @@ export const RegisterForm = () => {
             onChange={(e) => setAddress(e.target.value)}
           />
 
+          {/* Campo para el número de teléfono */}
           <Input
             id="phone"
             name="phone"
@@ -132,12 +145,12 @@ export const RegisterForm = () => {
             onChange={(e) => setPhone(e.target.value)}
           />
 
-          {/* 🔹 Selección de método de pago */}
+          {/* Selección del método de pago */}
           <div className={styles.paymentContainer}>
             <label className={styles.paymentLabel}>Método de pago:</label>
             <div className={styles.paymentOptions}>
               <label className={styles.radioOption}>
-              Tarjeta de crédito/débito 
+                Tarjeta de crédito/débito
                 <input
                   type="radio"
                   name="paymentMethod"
@@ -148,7 +161,7 @@ export const RegisterForm = () => {
                 <CreditCard size={16} />
               </label>
               <label className={styles.radioOption}>
-              PayPal 
+                PayPal
                 <input
                   type="radio"
                   name="paymentMethod"
@@ -156,18 +169,19 @@ export const RegisterForm = () => {
                   checked={paymentMethod === 'paypal'}
                   onChange={(e) => setPaymentMethod(e.target.value)}
                 />
-                <DollarSign size={16} /> 
+                <DollarSign size={16} />
               </label>
-
-              
             </div>
           </div>
 
+          {/* Mensaje de error si existe algún problema */}
           {error && <p className={styles.error}>{error}</p>}
 
+          {/* Botón para enviar el formulario */}
           <Button type="submit">Registrarse</Button>
         </form>
 
+        {/* Enlace para redirigir a la página de inicio de sesión si ya tiene una cuenta */}
         <p className={styles.footer}>
           ¿Ya tienes una cuenta?{' '}
           <Link href="/profile">Iniciar sesión</Link>
