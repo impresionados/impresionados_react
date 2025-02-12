@@ -17,7 +17,7 @@ export const LoginForm = ({ setUser }: { setUser: (user: any) => void }) => {
     setError('');
 
     try {
-      const response = await fetch(`http://192.168.1.133:8001/users/${encodeURIComponent(email)}`);
+      const response = await fetch(`http://192.168.68.127:8001/users/${encodeURIComponent(email)}`);
       if (!response.ok) {
         throw new Error('Usuario no encontrado');
       }
