@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import './ProductDetail.css';
 import { useCartStore } from '../../store/cartStore';
 
+// Definimos la interfaz para la estructura del producto
 interface Product {
   id: string;
   name: string;
@@ -20,12 +21,16 @@ interface Product {
 }
 
 export const ProductDetail: React.FC = () => {
+  // Obtenemos el `productId` de los parámetros de la URL
   const { productId } = useParams<{ productId: string }>();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const addItem = useCartStore((state) => state.addItem);
 
+  // Estados del componente
+  const [product, setProduct] = useState<Product | null>(null); // Estado para almacenar el producto
+  const [imageUrl, setImageUrl] = useState<string | null>(null); // Estado para almacenar la imagen
+  const [loading, setLoading] = useState(true); // Estado de carga
+  const addItem = useCartStore((state) => state.addItem); // Hook para agregar al carrito
+
+  // Efecto para cargar los datos del producto desde el caché (localStorage)
   useEffect(() => {
     const loadProductFromCache = () => {
       const cachedProducts = localStorage.getItem("products");
@@ -71,6 +76,7 @@ export const ProductDetail: React.FC = () => {
     loadImageFromCache();
   }, [productId]);
 
+  // Si el estado está en carga, mostramos un spinner
   if (loading) {
     return (
       <div className="loading-container">
@@ -82,20 +88,26 @@ export const ProductDetail: React.FC = () => {
     );
   }
 
+  // Si no se encuentra el producto en el caché, mostramos un mensaje de error
   if (!product) {
     return <p className="loading">❌ Error: No se encontró el producto en caché.</p>;
   }
 
   return (
     <div className="product-detail">
+      {/* Título del producto */}
       <h1 className="product-title">{product.name}</h1>
+      
       <div className="product-container">
+        {/* Imagen del producto */}
         <div className="product-image">
           {imageUrl ? <img src={imageUrl} alt={product.name} /> : <p>Imagen no disponible</p>}
         </div>
+
+        {/* Información del producto */}
         <div className="product-info">
           <div className="details">
-            <p><strong>Precio:</strong> ${product.price.toFixed(2)}</p>
+            <p><strong>Precio:</strong> €{product.price.toFixed(2)}</p> {/* Cambio de $ a € */}
             {product.stock === 0 ? (
               <p><strong>Stock:</strong> En producción...</p>
             ) : (
@@ -105,11 +117,15 @@ export const ProductDetail: React.FC = () => {
             <p><strong>Super Tipo:</strong> {product.super_tipo}</p>
             <p><strong>Calificación:</strong> ⭐ </p>
           </div>
+
+          {/* Botón para añadir al carrito */}
           <button onClick={() => addItem(product)} className="add-to-cart-details">
             Añadir al carrito
           </button>
         </div>
       </div>
+
+      {/* Descripción del producto */}
       <div className="description-container">
         <p className="description">{product.description}</p>
       </div>
