@@ -4,10 +4,16 @@ export interface Product {
   description: string;
   price: number;
   stock: number;
-  category: string[];
-  image: string;
-  ratings: any[];
+  tipo: string[];
+  image?: string;
+  supertipo: string;
+  ratings: Array<{
+    user: string;
+    score: number;
+    comment: string;
+  }>;
 }
+
 
 export interface User {
   id: string;
@@ -16,10 +22,6 @@ export interface User {
   registration_date: string;
 }
 
-export interface Category {
-  id: string;
-  name: string;
-}
 
 export interface CartItem extends Product {
   quantity: number;

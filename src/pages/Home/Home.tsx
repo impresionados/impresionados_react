@@ -2,22 +2,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import { ProductsList } from "../../components/ProductList/ProductList";
 import { Footer } from "../../components/Footer/Footer";
 import "./Home.css";
+import  {Product} from "../../types/index"
 
-// Definimos la estructura de un producto
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  category: string[];
-  super_tipo: string;
-  ratings: Array<{
-    user: string;
-    score: number;
-    comment: string;
-  }>;
-}
 
 // Propiedades del componente `Home`
 interface HomeProps {
@@ -61,7 +47,7 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
         } else {
           // Si no hay datos válidos en cache, hacemos una petición a la API
           console.log("🔄 Fetching productos desde API...");
-          const response = await fetch("http://10.102.10.15:8001/products/");
+          const response = await fetch("http://10.102.10.35:8001/products/");
           if (!response.ok) throw new Error("Error al obtener los productos de la API");
 
           const data = await response.json();
@@ -117,7 +103,7 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
           } else {
             try {
               // Fetch de la imagen del producto desde la API
-              const response = await fetch(`http://10.102.10.15:8001/products/${product.id}/image`);
+              const response = await fetch(`http://10.102.10.35:8001/products/${product.id}/image`);
               if (!response.ok) throw new Error(`No se pudo cargar la imagen para ${product.id}`);
               const blob = await response.blob();
               const base64Image = await blobToBase64(blob);

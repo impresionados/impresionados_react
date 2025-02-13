@@ -7,23 +7,8 @@ import { ProductActions } from './Components/ProductActions/ProductActions';
 import { useCartStore } from '../../store/cartStore';
 import { Link } from 'react-router-dom';
 import './ProductCard.css';
+import  {Product} from "../../types/index"
 
-// Definimos la estructura de un producto
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  category: string[];
-  image: string;
-  super_tipo: string;
-  ratings: Array<{
-    user: string;
-    score: number;
-    comment: string;
-  }>;
-}
 
 // Definimos las propiedades del `ProductCard`
 interface ProductCardProps {
@@ -47,7 +32,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, context = 'st
         <Link to={`/product/${product.id}`} className="product-action">
           <h3 className="product-name">{product.name}</h3>
           <ProductDescription description={product.description} />
-          <ProductCategories categories={product.category} />
+          <ProductCategories categories={product.tipo} />
           <ProductPrice price={product.price} />
         </Link>
 

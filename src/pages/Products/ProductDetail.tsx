@@ -2,23 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './ProductDetail.css';
 import { useCartStore } from '../../store/cartStore';
-
-// Definimos la interfaz para la estructura del producto
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  category: string[];
-  image?: string;
-  super_tipo: string;
-  ratings: Array<{
-    user: string;
-    score: number;
-    comment: string;
-  }>;
-}
+import  {Product} from "../../types/index"
 
 export const ProductDetail: React.FC = () => {
   // Obtenemos el `productId` de los parámetros de la URL
@@ -54,8 +38,8 @@ export const ProductDetail: React.FC = () => {
         description: "Sin descripción disponible.",
         price: 0,
         stock: 0,
-        category: [],
-        super_tipo: "Desconocido",
+        tipo: [],
+        supertipo: "Desconocido",
         ratings: [],
       });
       setLoading(false);
@@ -113,8 +97,8 @@ export const ProductDetail: React.FC = () => {
             ) : (
               <p><strong>Stock:</strong> {product.stock} unidades disponibles.</p>
             )}
-            <p><strong>Categorías:</strong> {product.category.join(', ')}</p>
-            <p><strong>Super Tipo:</strong> {product.super_tipo}</p>
+            <p><strong>Categorías:</strong> {product.tipo.join(', ')}</p>
+            <p><strong>Super Tipo:</strong> {product.supertipo}</p>
             <p><strong>Calificación:</strong> ⭐ </p>
           </div>
 

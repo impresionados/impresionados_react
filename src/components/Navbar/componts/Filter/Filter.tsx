@@ -26,7 +26,7 @@ export const Filters: React.FC<FiltersProps> = ({ onFilterChange }) => {
       }
 
       try {
-        const response = await fetch("http://10.102.10.15:8001/supertypes_with_types/");
+        const response = await fetch("http://10.102.10.35:8001/supertypes_with_types/");
         if (!response.ok) throw new Error("Error al obtener los filtros");
 
         const data = await response.json();
