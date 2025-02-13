@@ -10,44 +10,70 @@ interface FilterListProps {
 export const FilterList: React.FC<FilterListProps> = ({ filters, selectedFilters, handleCheckboxChange }) => {
   
   const handleSupertypeCheckboxChange = (supertype: string) => {
+
     const selectedSubtypes = selectedFilters[supertype] || [];
+
     const isSupertypeSelected = selectedSubtypes.includes("__SUPER_TYPE_SELECTED__");
+
 
     if (isSupertypeSelected) {
-        // ✅ Si el supertipo está seleccionado, lo desmarcamos junto con todos los subtipos
-        handleCheckboxChange(supertype, "__SUPER_TYPE_SELECTED__");
-        selectedSubtypes.forEach(type => {
-            if (type !== "__SUPER_TYPE_SELECTED__") {
-                handleCheckboxChange(supertype, type);
-            }
-        });
-    } else {
-        // ✅ Si el supertipo NO está seleccionado, activamos solo el supertipo
-        selectedSubtypes.forEach(type => handleCheckboxChange(supertype, type)); // Desmarcar subtipos
-        handleCheckboxChange(supertype, "__SUPER_TYPE_SELECTED__");
-    }
-};
 
-const handleSubtypeCheckboxChange = (supertype: string, type: string) => {
+        // Si el supertipo está seleccionado, lo desmarcamos junto con todos los subtipos
+
+        handleCheckboxChange(supertype, "__SUPER_TYPE_SELECTED__");
+
+        selectedSubtypes.forEach(type => {
+
+            if (type !== "__SUPER_TYPE_SELECTED__") {
+
+                handleCheckboxChange(supertype, type);
+
+            }
+
+        });
+
+    } else {
+
+        // Si el supertipo NO está seleccionado, activamos solo el supertipo
+
+        handleCheckboxChange(supertype, "__SUPER_TYPE_SELECTED__");
+
+    }
+
+  };
+
+
+  const handleSubtypeCheckboxChange = (supertype: string, type: string) => {
+
     const selectedSubtypes = selectedFilters[supertype] || [];
+
     const isSupertypeSelected = selectedSubtypes.includes("__SUPER_TYPE_SELECTED__");
 
-    // ✅ Alternamos el estado del subtipo seleccionado
+
+
+
+
+    // Si el supertipo estaba seleccionado, lo desmarcamos
+
+    if (isSupertypeSelected) {
+
+        handleCheckboxChange(supertype, "__SUPER_TYPE_SELECTED__");
+        
+
+    }
+    // Alternamos el estado del subtipo seleccionado
+
     handleCheckboxChange(supertype, type);
 
-    if (isSupertypeSelected) {
-        // ✅ Si había `__SUPER_TYPE_SELECTED__`, lo quitamos al seleccionar un subtipo
-        handleCheckboxChange(supertype, "__SUPER_TYPE_SELECTED__");
-    }
 
-    // ✅ Si no queda ningún subtipo seleccionado, añadir `__SUPER_TYPE_SELECTED__` de nuevo
-    setTimeout(() => {
-        const updatedSubtypes = selectedFilters[supertype] || [];
-        if (updatedSubtypes.length === 0) {
-            handleCheckboxChange(supertype, "__SUPER_TYPE_SELECTED__");
-        }
-    }, 0);
-};
+
+
+  };
+
+
+
+
+
 
 
 
