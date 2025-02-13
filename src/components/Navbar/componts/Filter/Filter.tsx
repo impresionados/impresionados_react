@@ -26,7 +26,7 @@ export const Filters: React.FC<FiltersProps> = ({ onFilterChange }) => {
       }
 
       try {
-        const response = await fetch("http://10.102.10.35:8001/supertypes_with_types/");
+        const response = await fetch("http://192.168.1.133:8001/supertypes_with_types/");
         if (!response.ok) throw new Error("Error al obtener los filtros");
 
         const data = await response.json();
@@ -43,15 +43,37 @@ export const Filters: React.FC<FiltersProps> = ({ onFilterChange }) => {
   const handleCheckboxChange = (supertype: string, type: string) => {
     setSelectedFilters((prevFilters) => {
       const updatedFilters = { ...prevFilters };
-      updatedFilters[supertype] = updatedFilters[supertype]?.includes(type)
-        ? updatedFilters[supertype].filter((t) => t !== type)
-        : [...(updatedFilters[supertype] || []), type];
-
-      localStorage.setItem("selected_filters", JSON.stringify(updatedFilters));
-      onFilterChange(updatedFilters);
+  
+      // Alternamos la selección del filtro
+      if (updatedFilters[supertype]?.includes(type)) {
+        updatedFilters[supertype] = updatedFilters[supertype].filter((t) => t !== type);
+        if (updatedFilters[supertype].length === 0) {
+          delete updatedFilters[supertype]; // Eliminar la clave si no quedan filtros
+        }
+      } else {
+        updatedFilters[supertype] = [...(updatedFilters[supertype] || []), type];
+      }
+      console.log(updatedFilters)
+  
+      // ✅ Usamos `useEffect` para actualizar `onFilterChange`, en lugar de hacerlo directamente aquí
       return updatedFilters;
     });
   };
+
+  useEffect(() => {
+    if (Object.keys(selectedFilters).length === 0) {
+      const allSupertypes = Object.keys(filters);
+      const defaultFilters = allSupertypes.reduce((acc, supertype) => {
+        acc[supertype] = ["__SUPER_TYPE_SELECTED__"];
+        return acc;
+      }, {} as { [key: string]: string[] });
+  
+      onFilterChange(defaultFilters);
+    } else {
+      onFilterChange(selectedFilters);
+    }
+  }, [selectedFilters, filters, onFilterChange]);
+  
 
   // ✅ Cierra los filtros si se hace clic fuera de ellos, excepto si se hace clic en el botón de filtros
   useEffect(() => {

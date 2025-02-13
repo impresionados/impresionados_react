@@ -8,9 +8,10 @@ import  {Product} from "../../types/index"
 // Propiedades del componente `Home`
 interface HomeProps {
   searchQuery: string; // Término de búsqueda ingresado por el usuario
+  selectedCategories: { [key: string]: string[] }; // ✅ Agregado para manejar los filtros de categorías
 }
 
-export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
+export const Home: React.FC<HomeProps> = ({ searchQuery, selectedCategories }) => {
   // Estado para almacenar la lista de productos
   const [products, setProducts] = useState<Product[]>([]);
   // Estado para almacenar imágenes de productos
@@ -47,7 +48,7 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
         } else {
           // Si no hay datos válidos en cache, hacemos una petición a la API
           console.log("🔄 Fetching productos desde API...");
-          const response = await fetch("http://10.102.10.35:8001/products/");
+          const response = await fetch("http://192.168.1.133:8001/products/");
           if (!response.ok) throw new Error("Error al obtener los productos de la API");
 
           const data = await response.json();
@@ -103,7 +104,7 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
           } else {
             try {
               // Fetch de la imagen del producto desde la API
-              const response = await fetch(`http://10.102.10.35:8001/products/${product.id}/image`);
+              const response = await fetch(`http://192.168.1.133:8001/products/${product.id}/image`);
               if (!response.ok) throw new Error(`No se pudo cargar la imagen para ${product.id}`);
               const blob = await response.blob();
               const base64Image = await blobToBase64(blob);
@@ -128,15 +129,41 @@ export const Home: React.FC<HomeProps> = ({ searchQuery }) => {
 
   // Filtrado de productos según la búsqueda del usuario
   const filteredProducts = useMemo(() => {
-    const filtered = products.filter((product) =>
-      product.name?.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
-    );
-
-    return filtered.map((product) => ({
-      ...product,
-      image: productImages[product.id] || "", // Asigna la imagen correspondiente
-    }));
-  }, [products, productImages, debouncedSearchQuery]);
+    return products
+      .filter((product) =>
+        product.name?.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+      )
+      .filter((product) => {
+        // ✅ Validar estructura de tipos
+        if (!Array.isArray(product.tipo) || typeof product.supertipo !== "string") return false;
+  
+        // ✅ Si no hay filtros activos, mostrar todo
+        if (Object.keys(selectedCategories).length === 0) return true;
+  
+        // ✅ Convertir a minúsculas para comparación case-insensitive
+        const productSupertype = product.supertipo.toLowerCase();
+        const productSubtypes = product.tipo.map(t => t.toLowerCase());
+  
+        return Object.entries(selectedCategories).some(([supertype, types]) => {
+          const supertypeLower = supertype.toLowerCase();
+          const typesLower = types.map(t => t.toLowerCase());
+  
+          // Caso 1: Supertype seleccionado directamente
+          if (typesLower.includes('__super_type_selected__')) {
+            return productSupertype === supertypeLower;
+          }
+  
+          // Caso 2: Subtipos seleccionados
+          return productSupertype === supertypeLower && 
+                 typesLower.some(t => productSubtypes.includes(t));
+        });
+      })
+      .map((product) => ({
+        ...product,
+        image: productImages[product.id] || "",
+      }));
+  }, [products, productImages, debouncedSearchQuery, selectedCategories]);
+    
 
   // Muestra un mensaje de carga si los productos aún no están disponibles
   if (loading) {
