@@ -25,7 +25,7 @@ La aplicación estará disponible en `http://localhost:5173/` (puerto por defect
 ## 📂 Estructura del proyecto
 
 ```
-impresionados_react-nico/
+impresionados_react/
 ├── src/
 │   ├── components/      # Componentes reutilizables
 │   │   ├── Navbar/      # Navbar y elementos relacionados
