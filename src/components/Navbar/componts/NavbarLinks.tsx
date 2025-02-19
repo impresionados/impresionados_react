@@ -11,7 +11,6 @@ export const NavLinks: React.FC<NavLinksProps> = ({ user }) => {
     <>
       <div className="navbar-link">
         <Search className="icon" />
-        <div className="icon-text">Buscar</div>
       </div>
       <CartLink />
       <Link to={user ? "/profile" : "/login"} className="navbar-link">

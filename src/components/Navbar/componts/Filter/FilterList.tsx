@@ -10,71 +10,41 @@ interface FilterListProps {
 export const FilterList: React.FC<FilterListProps> = ({ filters, selectedFilters, handleCheckboxChange }) => {
   
   const handleSupertypeCheckboxChange = (supertype: string) => {
-
     const selectedSubtypes = selectedFilters[supertype] || [];
-
     const isSupertypeSelected = selectedSubtypes.includes("__SUPER_TYPE_SELECTED__");
 
-
     if (isSupertypeSelected) {
-
-        // Si el supertipo está seleccionado, lo desmarcamos junto con todos los subtipos
-
+        // ✅ Si el supertipo está seleccionado, lo desmarcamos junto con todos los subtipos
         handleCheckboxChange(supertype, "__SUPER_TYPE_SELECTED__");
-
         selectedSubtypes.forEach(type => {
-
             if (type !== "__SUPER_TYPE_SELECTED__") {
-
                 handleCheckboxChange(supertype, type);
-
             }
-
         });
-
     } else {
-
-        // Si el supertipo NO está seleccionado, activamos solo el supertipo
-
-        handleCheckboxChange(supertype, "__SUPER_TYPE_SELECTED__");
-
+        if (selectedSubtypes.length > 0) {
+            // ✅ Si hay subtipos seleccionados, los desmarcamos todos y también desmarcamos el supertipo
+            selectedSubtypes.forEach(type => handleCheckboxChange(supertype, type));
+        } else {
+            // ✅ Si no hay subtipos seleccionados, activamos el supertipo
+            handleCheckboxChange(supertype, "__SUPER_TYPE_SELECTED__");
+        }
     }
+};
 
-  };
 
 
   const handleSubtypeCheckboxChange = (supertype: string, type: string) => {
-
     const selectedSubtypes = selectedFilters[supertype] || [];
-
-    const isSupertypeSelected = selectedSubtypes.includes("__SUPER_TYPE_SELECTED__");
-
-
-
-
-
-    // Si el supertipo estaba seleccionado, lo desmarcamos
-
-    if (isSupertypeSelected) {
-
-        handleCheckboxChange(supertype, "__SUPER_TYPE_SELECTED__");
-        
-
-    }
-    // Alternamos el estado del subtipo seleccionado
-
+    
+    // ✅ Alternamos el estado del subtipo seleccionado
     handleCheckboxChange(supertype, type);
 
-
-
-
-  };
-
-
-
-
-
-
+    // ✅ Si `__SUPER_TYPE_SELECTED__` está en la lista, lo eliminamos
+    if (selectedSubtypes.includes("__SUPER_TYPE_SELECTED__")) {
+        handleCheckboxChange(supertype, "__SUPER_TYPE_SELECTED__");
+    }
+};
 
 
   return (
@@ -82,15 +52,15 @@ export const FilterList: React.FC<FilterListProps> = ({ filters, selectedFilters
       {Object.entries(filters).map(([supertype, types]) => {
         const selectedSubtypes = selectedFilters[supertype] || [];
         const isSupertypeSelected = selectedSubtypes.includes("__SUPER_TYPE_SELECTED__");
-        const allSubtypesSelected = types.every(type => selectedSubtypes.includes(type));
         const allSupertypesSelected = Object.keys(selectedFilters).length === 0;
+        const isSupertypeChecked = isSupertypeSelected || selectedSubtypes.length > 0;
 
         return (
           <div key={supertype} className="filter-category">
             <label className="filter-option filter-title">
-              <input
+            <input
                 type="checkbox"
-                checked={isSupertypeSelected || allSupertypesSelected}
+                checked={isSupertypeChecked}
                 onChange={() => handleSupertypeCheckboxChange(supertype)}
               />
               {supertype}
